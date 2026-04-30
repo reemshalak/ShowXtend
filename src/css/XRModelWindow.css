@@ -1,0 +1,428 @@
+/* XRModelWindow.css — WebSpatial / Pico OS6 correct implementation */
+
+/* ── Animations ─────────────────────────────────────────────────────────────*/
+@keyframes xrm-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes xrm-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.12); opacity: 1; }
+}
+
+@keyframes xrm-shimmer {
+  0%   { background-position: -200px 0; }
+  100% { background-position:  200px 0; }
+}
+
+@keyframes xrm-spin2 {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes xrm-toolbar-in {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── WebSpatial transparent window ─────────────────────────────────────────*/
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+html.is-spatial {
+  --xr-background-material: transparent;
+}
+
+html.is-spatial body,
+html.is-spatial #root {
+  background: transparent;
+}
+
+/* ── Color Popover ──────────────────────────────────────────────────────────*/
+.xrm-color-popover {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(6, 6, 14, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  padding: 10px 12px 8px;
+  z-index: 500;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.8);
+  min-width: 160px;
+}
+
+.xrm-color-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.xrm-color-popover-title {
+  font-size: 0.66rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 700;
+}
+
+.xrm-color-popover-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+}
+
+.xrm-color-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+}
+
+.xrm-color-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+}
+
+.xrm-color-swatch-active {
+  border: 2.5px solid #fff !important;
+}
+
+/* ── Circular Toolbar ───────────────────────────────────────────────────────*/
+.xrm-toolbar-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.xrm-toolbar-background {
+  position: absolute;
+  left: -80px;
+  top: -80px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: rgba(10, 10, 20, 0.75);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  pointer-events: auto;
+}
+
+.xrm-toolbar-label {
+  position: absolute;
+  left: -70px;
+  top: 85px;
+  width: 140px;
+  text-align: center;
+  background: rgba(10, 10, 22, 0.82);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.78);
+  white-space: nowrap;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.xrm-toolbar-label-color {
+  font-size: 0.8rem;
+}
+
+.xrm-toolbar-label-percent {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.6rem;
+}
+
+.xrm-toolbar-close {
+  position: absolute;
+  left: -77px;
+  top: -77px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(30, 30, 44, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.65rem;
+  cursor: pointer;
+  z-index: 20;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.xrm-toolbar-close:hover {
+  background: rgba(239, 68, 68, 0.35);
+  border-color: rgba(239, 68, 68, 0.6);
+}
+
+.xrm-toolbar-color-popout {
+  position: absolute;
+  left: -100px;
+  bottom: 95px;
+  z-index: 400;
+  pointer-events: auto;
+}
+
+.xrm-toolbar-btn {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 15;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px) saturate(160%);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  font-size: 0.9rem;
+}
+
+.xrm-toolbar-btn:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.xrm-toolbar-btn-danger {
+  border: 1px solid rgba(239, 68, 68, 0.65);
+  background: rgba(239, 68, 68, 0.28);
+  color: #fca5a5;
+}
+
+.xrm-toolbar-btn-danger:hover {
+  background: rgba(239, 68, 68, 0.45);
+}
+
+.xrm-toolbar-btn-active {
+  border: 1px solid rgba(99, 102, 241, 0.85);
+  background: rgba(99, 102, 241, 0.42);
+  color: #fff;
+}
+
+.xrm-toolbar-btn-default {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(20, 20, 32, 0.82);
+  color: #fff;
+}
+
+/* ── Generating UI ──────────────────────────────────────────────────────────*/
+.xrm-generating-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: transparent;
+  border-radius: 18px;
+  box-sizing: border-box;
+}
+
+html.is-spatial .xrm-generating-container {
+  --xr-background-material: translucent;
+  background: transparent;
+}
+
+html:not(.is-spatial) .xrm-generating-container {
+  background: rgba(8, 8, 18, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.xrm-generating-emoji {
+  font-size: 2.8rem;
+  animation: xrm-pulse 1.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 18px rgba(99, 160, 255, 0.45));
+}
+
+.xrm-generating-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.02em;
+}
+
+.xrm-progress-bar-container {
+  width: 160px;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+.xrm-progress-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  transition: width 1s linear;
+  box-shadow: 0 0 8px rgba(99, 160, 255, 0.6);
+}
+
+.xrm-progress-bar-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.25) 50%, transparent 100%);
+  background-size: 200px 100%;
+  animation: xrm-shimmer 1.4s linear infinite;
+}
+
+.xrm-generating-time {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.03em;
+}
+
+/* ── Main Window States ─────────────────────────────────────────────────────*/
+.xrmw-init-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.xrmw-init-text {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.xrmw-ready-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: transparent;
+  overflow: visible;
+  box-sizing: border-box;
+  border-radius: 20px;
+}
+
+.xrmw-model {
+  --xr-depth: 200px;
+}
+
+/* ── Loading Overlay ────────────────────────────────────────────────────────*/
+.xrmw-loading-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+html.is-spatial .xrmw-loading-overlay {
+  --xr-background-material: translucent;
+  background: transparent;
+}
+
+html:not(.is-spatial) .xrmw-loading-overlay {
+  background: rgba(8, 8, 18, 0.7);
+  backdrop-filter: blur(12px);
+}
+
+.xrmw-loading-emoji {
+  font-size: 2rem;
+  animation: xrm-spin2 1s linear infinite;
+}
+
+.xrmw-loading-text {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Status badges ──────────────────────────────────────────────────────────*/
+.xrmw-error-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 0.66rem;
+  color: #fca5a5;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 10;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.xrmw-selection-ring {
+  position: absolute;
+  inset: 4px;
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.xrmw-hint {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 0.66rem;
+  color: rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 8;
+}
+
+.xrmw-toolbar-wrapper {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: auto;
+  height: auto;
+  overflow: visible;
+  pointer-events: auto;
+  z-index: 1000;
+  --xr-back: 100;
+  animation: xrm-toolbar-in 0.2s ease-out forwards;
+}

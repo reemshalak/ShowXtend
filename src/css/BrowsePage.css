@@ -1,0 +1,1875 @@
+
+/* ══════════════════════════════════════════════════════════════════════════
+   BROWSE / CATALOG GRID VIEW  (IKEA Vision Pro style)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.browse-root {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  min-height: 100svh;
+  padding: 1.5rem;
+  background: transparent;
+  box-sizing: border-box;
+  
+}
+
+/* ── Left side nav ─────────────────────────────────────────────────────── */
+.browse-sidenav {
+  width: 56px;
+  flex-shrink: 0;
+  padding: 0.75rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 28px !important;
+  position: sticky;
+  top: 1.5rem;
+}
+
+.sidenav-btn {
+  position: relative;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.5);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.sidenav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.sidenav-btn--active { color: #fff; }
+.sidenav-dot {
+  position: absolute;
+  bottom: 2px; right: 6px;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #34d399;
+}
+.sidenav-icon { line-height: 1; }
+
+/* ── Main browse panel ─────────────────────────────────────────────────── */
+.browse-panel {
+  flex: 1;
+  padding: 1.75rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+  max-height: 95svh;
+  overflow-y: auto;
+  border-radius: 32px !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+
+/* ── Browse header ─────────────────────────────────────────────────────── */
+.browse-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.browse-heading {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0;
+  flex-shrink: 0;
+}
+.browse-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+/* Search bar */
+.browse-search-wrap {
+  flex: 1;
+  max-width: 360px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  padding: 0.45rem 1rem;
+}
+.browse-search-icon  { color: rgba(255,255,255,0.4); font-size: 0.9rem; flex-shrink: 0; }
+.browse-search-input {
+  flex: 1; background: none; border: none; outline: none;
+  color: #fff; font-size: 0.88rem;
+}
+.browse-search-input::placeholder { color: rgba(255,255,255,0.3); }
+.browse-search-clear {
+  background: none; border: none; color: rgba(255,255,255,0.35);
+  cursor: pointer; font-size: 0.8rem; padding: 0;
+}
+
+/* Sort */
+.browse-sort-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.8rem;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.browse-sort-btn:hover { background: rgba(255,255,255,0.14); }
+
+.browse-sort-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 180px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  z-index: 200;
+  border-radius: 16px !important;
+}
+.browse-sort-option {
+  background: none; border: none; color: rgba(255,255,255,0.7);
+  font-size: 0.82rem; padding: 0.55rem 0.75rem;
+  border-radius: 10px; cursor: pointer; text-align: left;
+  transition: background 0.12s;
+}
+.browse-sort-option:hover { background: rgba(255,255,255,0.08); }
+.browse-sort-option--active { color: #fff; font-weight: 600; }
+
+/* ── Category pills ────────────────────────────────────────────────────── */
+.browse-categories {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.browse-cat-pill {
+  padding: 0.45rem 1.1rem;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.65);
+  font-size: 0.83rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.browse-cat-pill:hover { background: rgba(255,255,255,0.13); color: #fff; }
+.browse-cat-pill--active {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.35);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ── Results row ───────────────────────────────────────────────────────── */
+.browse-results-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.browse-results-count { font-size: 0.82rem; color: rgba(255,255,255,0.45); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.browse-control-badge { font-size: 0.72rem; background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.4); color: #34d399; border-radius: 100px; padding: 0.15rem 0.6rem; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   BROWSE CARD — GLOSSY SPATIAL GLASS (XR + Web)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Card enter animation ─────────────────────────────────────────────────── */
+@keyframes card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* ── Product grid ──────────────────────────────────────────────────────── */
+.browse-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+/* ── Base card reset ──────────────────────────────────────────────────────── */
+.browse-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 22px;
+  overflow: visible;
+  cursor: pointer;
+  isolation: isolate;
+
+  animation: card-rise 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--card-i, 0) * 45ms);
+  transform-style: preserve-3d;
+  transition:
+    transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+/* ── Web glass (dark theme) ──────────────────────────────────────────────── */
+.browse-card {
+  background: linear-gradient(
+    160deg,
+    rgba(255,255,255,0.13) 0%,
+    rgba(255,255,255,0.04) 35%,
+    rgba(255,255,255,0.02) 100%
+  );
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.28),
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    inset 0 -1px 0 rgba(0,0,0,0.18);
+}
+
+/* ── Specular highlight layer (::before) ─────────────────────────────────── */
+.browse-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    130deg,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.06) 28%,
+    transparent 55%
+  );
+  pointer-events: none;
+  z-index: 3;
+  transition: opacity 0.25s ease;
+}
+
+/* ── Inner glow ring (::after) ────────────────────────────────────────────── */
+.browse-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    rgba(255,255,255,0.08) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* ── Hover state ─────────────────────────────────────────────────────────── */
+.browse-card:hover,
+.browse-card--hovered {
+  background: linear-gradient(
+    160deg,
+    rgba(255,255,255,0.20) 0%,
+    rgba(255,255,255,0.08) 40%,
+    rgba(255,255,255,0.04) 100%
+  );
+  border-color: rgba(255,255,255,0.28);
+  box-shadow:
+    0 12px 48px rgba(0,0,0,0.38),
+    0 2px 12px rgba(0,0,0,0.22),
+    inset 0 1px 0 rgba(255,255,255,0.32),
+    inset 0 -1px 0 rgba(0,0,0,0.12);
+  transform: translateY(-5px) scale(1.012);
+}
+
+.browse-card:hover::after,
+.browse-card--hovered::after {
+  opacity: 1;
+}
+
+/* ── Active / press ───────────────────────────────────────────────────────── */
+.browse-card:active {
+  transform: translateY(-2px) scale(1.005);
+  box-shadow:
+    0 6px 24px rgba(0,0,0,0.32),
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    inset 0 -1px 0 rgba(0,0,0,0.2);
+  transition-duration: 0.1s;
+}
+
+/* Badges */
+.browse-card-badges {
+  position: absolute;
+  top: 0.6rem; left: 0.6rem;
+  display: flex; gap: 0.3rem;
+  z-index: 5;
+}
+.browse-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: 100px;
+  letter-spacing: 0.04em;
+}
+.browse-badge--sale {
+  background: #ef4444;
+  color: #fff;
+}
+.browse-badge--new {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+}
+
+/* Image area */
+.browse-card-image {
+  height: 180px;
+  background: linear-gradient(
+    175deg,
+    rgba(255,255,255,0.10) 0%,
+    rgba(255,255,255,0.03) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 18px 18px 0 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14);
+}
+
+.browse-card-emoji {
+  font-size: 5rem;
+  line-height: 1;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,0.35));
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), filter 0.4s ease;
+  will-change: transform;
+}
+.browse-card:hover .browse-card-emoji,
+.browse-card--hovered .browse-card-emoji {
+  transform: translateY(-8px) scale(1.06);
+  filter: drop-shadow(0 14px 28px rgba(0,0,0,0.4));
+}
+
+.browse-card-image img {
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.browse-card:hover .browse-card-image img,
+.browse-card--hovered .browse-card-image img {
+  transform: translateY(-6px) scale(1.04);
+}
+
+/* ── Card info area ──────────────────────────────────────────────────────── */
+.browse-card-info {
+  padding: 0.85rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  z-index: 1;
+}
+
+.browse-card-name { font-size: 0.95rem; font-weight: 700; margin: 0; }
+.browse-card-type { font-size: 0.75rem; color: rgba(255,255,255,0.45); margin: 0; }
+
+.browse-card-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.25rem;
+}
+.browse-stars { color: #f5c518; font-size: 0.7rem; letter-spacing: 0.05em; }
+.browse-rating-num { font-size: 0.68rem; color: rgba(255,255,255,0.35); }
+
+.browse-card-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+.browse-card-price    { font-size: 1rem; font-weight: 800; }
+.browse-card-original { font-size: 0.78rem; color: rgba(255,255,255,0.35); text-decoration: line-through; }
+.browse-card-unit     { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
+
+/* ── Action buttons: glassmorphic pill row ───────────────────────────────── */
+.browse-card-actions {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  gap: 0.3rem;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.22s cubic-bezier(0.16,1,0.3,1),
+    transform 0.22s cubic-bezier(0.16,1,0.3,1);
+  z-index: 10;
+}
+.browse-card-actions--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Web button styles (dark glass) */
+.browse-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(18,18,24,0.72);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  color: rgba(255,255,255,0.78);
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s,
+    transform 0.18s cubic-bezier(0.16,1,0.3,1),
+    box-shadow 0.15s;
+  box-shadow:
+    0 2px 10px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.14);
+}
+.browse-action-btn:hover {
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(20px) saturate(200%);
+  -webkit-backdrop-filter: blur(20px) saturate(200%);
+  color: #fff;
+  border-color: rgba(255,255,255,0.42);
+  transform: scale(1.1);
+  box-shadow:
+    0 4px 16px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.28);
+}
+.browse-action-btn:active {
+  transform: scale(0.93);
+  transition-duration: 0.08s;
+}
+.browse-action-btn--wishlisted {
+  color: #f87171;
+  border-color: rgba(248,113,113,0.45);
+  background: rgba(248,113,113,0.14);
+}
+.browse-action-btn--wishlisted:hover {
+  background: rgba(248,113,113,0.25);
+  border-color: rgba(248,113,113,0.65);
+}
+
+/* Empty state */
+.browse-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem;
+  color: rgba(255,255,255,0.35);
+  font-size: 0.9rem;
+}
+
+/* ── Back to browse button (detail mode) ─────────────────────────────────── */
+.browse-back-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  color: rgba(255,255,255,0.65);
+  font-size: 0.82rem;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.browse-back-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   XR MODE OVERRIDES — Light glass for PICO (visionOS style)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+html.is-spatial .browse-card {
+  --xr-background-material: translucent;
+  background: linear-gradient(
+    150deg,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.07) 40%,
+    rgba(255,255,255,0.04) 100%
+  ) !important;
+  backdrop-filter: blur(0px) !important;
+  -webkit-backdrop-filter: blur(0px) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  box-shadow:
+    0 4px 32px rgba(0,0,0,0.18),
+    inset 0 1.5px 0 rgba(255,255,255,0.38),
+    inset 0 -1px 0 rgba(0,0,0,0.10) !important;
+  border-radius: 22px;
+}
+
+html.is-spatial .browse-card::before {
+  background: linear-gradient(
+    125deg,
+    rgba(255,255,255,0.28) 0%,
+    rgba(255,255,255,0.10) 25%,
+    transparent 50%
+  );
+}
+
+html.is-spatial .browse-card:hover,
+html.is-spatial .browse-card--hovered {
+  background: linear-gradient(
+    150deg,
+    rgba(255,255,255,0.28) 0%,
+    rgba(255,255,255,0.12) 45%,
+    rgba(255,255,255,0.06) 100%
+  ) !important;
+  border-color: rgba(255,255,255,0.40) !important;
+  box-shadow:
+    0 16px 56px rgba(0,0,0,0.22),
+    0 2px 12px rgba(0,0,0,0.14),
+    inset 0 1.5px 0 rgba(255,255,255,0.50),
+    inset 0 -1px 0 rgba(0,0,0,0.08) !important;
+  transform: translateY(-6px) scale(1.015) !important;
+}
+
+/* XR: always show action buttons */
+html.is-spatial .browse-card-actions {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* XR: Light glass buttons (NOT dark grey) */
+html.is-spatial .browse-action-btn {
+  width: 44px;
+  height: 44px;
+  font-size: 1.05rem;
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  box-shadow:
+    0 2px 14px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.25) !important;
+}
+
+html.is-spatial .browse-action-btn:hover {
+  transform: scale(1.12);
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+html.is-spatial .browse-action-btn:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* XR: Wishlisted button */
+html.is-spatial .browse-action-btn--wishlisted {
+  color: #f87171 !important;
+  background: rgba(248, 113, 113, 0.2) !important;
+  border-color: rgba(248, 113, 113, 0.4) !important;
+}
+
+html.is-spatial .browse-action-btn--wishlisted:hover {
+  background: rgba(248, 113, 113, 0.3) !important;
+  border-color: rgba(248, 113, 113, 0.6) !important;
+}
+
+/* XR: image area tinted lighter */
+html.is-spatial .browse-card-image {
+  background: linear-gradient(
+    175deg,
+    rgba(255,255,255,0.16) 0%,
+    rgba(255,255,255,0.06) 100%
+  );
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.22);
+}
+
+/* XR: info separator stronger */
+html.is-spatial .browse-card-info {
+  border-top-color: rgba(255,255,255,0.14);
+}
+
+/* ── Skeleton loading pulse ────────────────────────────────────────────── */
+@keyframes glass-pulse {
+  0%, 100% { opacity: 0.45; }
+  50%       { opacity: 0.15; }
+}
+
+.browse-card[style*="pointer-events:none"] {
+  animation: glass-pulse 1.4s ease-in-out infinite;
+}
+
+/* ── Category pill — glass style upgrade ─────────────────────────────────── */
+.browse-cat-pill {
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+  transition: all 0.18s cubic-bezier(0.16,1,0.3,1);
+}
+.browse-cat-pill:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 3px 12px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.18);
+}
+.browse-cat-pill--active {
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  box-shadow:
+    0 2px 14px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.28);
+}
+
+/* XR category pills — lighter glass */
+html.is-spatial .browse-cat-pill {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.20);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.20);
+}
+html.is-spatial .browse-cat-pill--active {
+  background: rgba(255,255,255,0.22);
+  border-color: rgba(255,255,255,0.40);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.36),
+    0 2px 12px rgba(0,0,0,0.14);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   XR MODE HOVER / SPATIAL EFFECTS — PICO Controller Feedback
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Card hover glow effect (controller pointer) ────────────────────────── */
+html.is-spatial .browse-card:hover,
+html.is-spatial .browse-card:focus-within {
+  transform: translateY(-8px) scale(1.02) !important;
+  transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1) !important;
+}
+
+/* ── Pulsing ring when card is hovered (attracts attention) ─────────────── */
+html.is-spatial .browse-card:hover::before {
+  background: radial-gradient(
+    circle at var(--x, 50%) var(--y, 50%),
+    rgba(255, 255, 255, 0.35) 0%,
+    transparent 70%
+  );
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+/* ── Button hover scale + glow (controller feedback) ────────────────────── */
+html.is-spatial .browse-action-btn:hover {
+  transform: scale(1.15) !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  transition: all 0.12s cubic-bezier(0.2, 0.9, 0.4, 1.1) !important;
+}
+
+/* ── Active press feedback (controller click) ───────────────────────────── */
+html.is-spatial .browse-action-btn:active {
+  transform: scale(0.92) !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  transition: all 0.05s ease !important;
+}
+
+/* ── Category pill hover effect ─────────────────────────────────────────── */
+html.is-spatial .browse-cat-pill:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ── Floating animation for product images (subtle levitate) ────────────── */
+@keyframes xr-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+html.is-spatial .browse-card:hover .browse-card-emoji,
+html.is-spatial .browse-card:focus-within .browse-card-emoji {
+  animation: xr-float 2s ease-in-out infinite;
+}
+
+/* ── Scan line effect on hover (premium spatial feel) ───────────────────── */
+html.is-spatial .browse-card:hover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 30%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.08) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 6;
+  animation: xr-scan 1.5s ease-in-out forwards;
+}
+
+@keyframes xr-scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ── Soft pulse on floating orb (draws attention to available actions) ───── */
+@keyframes xr-pulse-gentle {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
+  }
+}
+
+/* Pulse on the FloatingAssistant orb in XR mode */
+html.is-spatial .floating-orb,
+html.is-spatial .orb-button,
+html.is-spatial [class*="Orb"],
+html.is-spatial button[style*="width: 64px"][style*="border-radius: 50%"] {
+  animation: xr-pulse-gentle 3s ease-in-out infinite;
+}
+
+/* Alternative: If you want it specifically on the orb circle */
+html.is-spatial .orb-glow,
+html.is-spatial .orb-ring {
+  animation: xr-pulse-gentle 3s ease-in-out infinite;
+}
+/* ── Focus ring for keyboard/controller navigation ──────────────────────── */
+html.is-spatial .browse-card:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.6), 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.is-spatial .browse-action-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.6), 0 0 0 4px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* ── Tilt effect on card hover (follows controller position) ────────────── */
+html.is-spatial .browse-card {
+  transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1) !important;
+  will-change: transform;
+}
+
+/* ── Micro interactions for buttons (subtle bounce) ─────────────────────── */
+@keyframes xr-micro-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+html.is-spatial .browse-action-btn--wishlisted:hover {
+  animation: xr-micro-bounce 0.3s ease;
+}
+
+
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FLOATING CATEGORIES PILL (XR mode only) — Pure Glass, No Grey
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Normal mode (web) - categories inside panel */
+.browse-categories {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  position: relative;
+  background: transparent;
+}
+
+/* XR mode - categories become independent floating glass pill at top center */
+
+.browse-categories--floating {
+  position: fixed !important;
+top: 0rem !important;          /* Very close to top edge */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 1000 !important;
+
+  flex-direction: row !important;
+  gap: 0.6rem !important;
+  flex-wrap: nowrap !important;
+  justify-content: center !important;
+
+  align-items: center !important;
+  padding: 0.6rem 1.5rem !important;
+  width: fit-content !important;
+
+    /* Add these for perfect centering */
+  margin: 0 auto !important;
+  right: auto !important;
+  
+  /* Ensure it's centered within the viewport, not parent */
+  width: fit-content !important;
+  max-width: 90vw !important;
+
+  /* min-width: 200px !important;
+  max-width: calc(100vw - 2rem) !important; */
+  
+  /* Pure glass background */
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(32px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
+  border: 0.5px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 60px !important;
+  
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  
+  pointer-events: auto;
+  animation: xr-categories-drop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+@keyframes xr-categories-drop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Floating category pill buttons - pure glass */
+html.is-spatial .browse-categories--floating .browse-cat-pill {
+  padding: 0.45rem 1.2rem !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  
+  /* Pure glass button */
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 0.5px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 40px !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+  box-shadow: none !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+html.is-spatial .browse-categories--floating .browse-cat-pill:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+html.is-spatial .browse-categories--floating .browse-cat-pill--active {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Hide the original categories container in XR mode */
+html.is-spatial .browse-categories:not(.browse-categories--floating) {
+  display: none !important;
+}
+
+
+/* If screen is too narrow, allow pill to be slightly smaller */
+@media (max-width: 700px) {
+  html.is-spatial .browse-categories--floating {
+    padding: 0.4rem 1rem !important;
+    gap: 0.35rem !important;
+  }
+  html.is-spatial .browse-categories--floating .browse-cat-pill {
+    padding: 0.35rem 0.9rem !important;
+    font-size: 0.75rem !important;
+  }
+}
+
+/* Gentle pulse on the floating pill (subtle, not distracting) */
+@keyframes xr-pill-subtle {
+  0%, 100% { 
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+  50% { 
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  }
+}
+
+html.is-spatial .browse-categories--floating {
+  animation: xr-categories-drop 0.35s cubic-bezier(0.16, 1, 0.3, 1), xr-pill-subtle 4s ease-in-out infinite;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   BROWSE / CATALOG GRID VIEW  (IKEA Vision Pro style)
+   ══════════════════════════════════════════════════════════════════════════ */
+html.is-spatial .browse-root {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  min-height: 100svh;
+  padding: 2rem;
+  padding-top: 5rem;  
+  background: transparent;
+  box-sizing: border-box;
+}
+
+/* ── Left side nav ─────────────────────────────────────────────────────── */
+.browse-sidenav {
+  width: 56px;
+  flex-shrink: 0;
+  padding: 0.75rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 28px !important;
+  position: sticky;
+  top: 1.5rem;
+}
+
+.sidenav-btn {
+  position: relative;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.5);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.sidenav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.sidenav-btn--active { color: #fff; }
+.sidenav-dot {
+  position: absolute;
+  bottom: 2px; right: 6px;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #34d399;
+}
+.sidenav-icon { line-height: 1; }
+
+/* ── Main browse panel ─────────────────────────────────────────────────── */
+.browse-panel {
+  flex: 1;
+  padding: 1.75rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+  max-height: 95svh;
+  overflow-y: auto;
+  border-radius: 32px !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+
+/* ── Browse header ─────────────────────────────────────────────────────── */
+.browse-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.browse-heading {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0;
+  flex-shrink: 0;
+}
+.browse-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+/* Search bar */
+.browse-search-wrap {
+  flex: 1;
+  max-width: 360px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  padding: 0.45rem 1rem;
+}
+.browse-search-icon  { color: rgba(255,255,255,0.4); font-size: 0.9rem; flex-shrink: 0; }
+.browse-search-input {
+  flex: 1; background: none; border: none; outline: none;
+  color: #fff; font-size: 0.88rem;
+}
+.browse-search-input::placeholder { color: rgba(255,255,255,0.3); }
+.browse-search-clear {
+  background: none; border: none; color: rgba(255,255,255,0.35);
+  cursor: pointer; font-size: 0.8rem; padding: 0;
+}
+
+/* Sort */
+.browse-sort-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.8rem;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.browse-sort-btn:hover { background: rgba(255,255,255,0.14); }
+
+.browse-sort-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 180px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  z-index: 200;
+  border-radius: 16px !important;
+}
+.browse-sort-option {
+  background: none; border: none; color: rgba(255,255,255,0.7);
+  font-size: 0.82rem; padding: 0.55rem 0.75rem;
+  border-radius: 10px; cursor: pointer; text-align: left;
+  transition: background 0.12s;
+}
+.browse-sort-option:hover { background: rgba(255,255,255,0.08); }
+.browse-sort-option--active { color: #fff; font-weight: 600; }
+
+/* ── Category pills ────────────────────────────────────────────────────── */
+.browse-categories {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.browse-cat-pill {
+  padding: 0.45rem 1.1rem;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.65);
+  font-size: 0.83rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.browse-cat-pill:hover { background: rgba(255,255,255,0.13); color: #fff; }
+.browse-cat-pill--active {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.35);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ── Results row ───────────────────────────────────────────────────────── */
+.browse-results-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.browse-results-count { font-size: 0.82rem; color: rgba(255,255,255,0.45); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.browse-control-badge { font-size: 0.72rem; background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.4); color: #34d399; border-radius: 100px; padding: 0.15rem 0.6rem; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   BROWSE CARD — GLOSSY SPATIAL GLASS (XR + Web)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Card enter animation ─────────────────────────────────────────────────── */
+@keyframes card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* ── Product grid ──────────────────────────────────────────────────────── */
+.browse-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+/* ── Base card reset ──────────────────────────────────────────────────────── */
+.browse-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 22px;
+  overflow: visible;
+  cursor: pointer;
+  isolation: isolate;
+
+  animation: card-rise 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--card-i, 0) * 45ms);
+  transform-style: preserve-3d;
+  transition:
+    transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+/* ── Web glass (dark theme) ──────────────────────────────────────────────── */
+.browse-card {
+  background: linear-gradient(
+    160deg,
+    rgba(255,255,255,0.13) 0%,
+    rgba(255,255,255,0.04) 35%,
+    rgba(255,255,255,0.02) 100%
+  );
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.28),
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    inset 0 -1px 0 rgba(0,0,0,0.18);
+}
+
+/* ── Specular highlight layer (::before) ─────────────────────────────────── */
+.browse-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    130deg,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.06) 28%,
+    transparent 55%
+  );
+  pointer-events: none;
+  z-index: 3;
+  transition: opacity 0.25s ease;
+}
+
+/* ── Inner glow ring (::after) ────────────────────────────────────────────── */
+.browse-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    rgba(255,255,255,0.08) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* ── Hover state ─────────────────────────────────────────────────────────── */
+.browse-card:hover,
+.browse-card--hovered {
+  background: linear-gradient(
+    160deg,
+    rgba(255,255,255,0.20) 0%,
+    rgba(255,255,255,0.08) 40%,
+    rgba(255,255,255,0.04) 100%
+  );
+  border-color: rgba(255,255,255,0.28);
+  box-shadow:
+    0 12px 48px rgba(0,0,0,0.38),
+    0 2px 12px rgba(0,0,0,0.22),
+    inset 0 1px 0 rgba(255,255,255,0.32),
+    inset 0 -1px 0 rgba(0,0,0,0.12);
+  transform: translateY(-5px) scale(1.012);
+}
+
+.browse-card:hover::after,
+.browse-card--hovered::after {
+  opacity: 1;
+}
+
+/* ── Active / press ───────────────────────────────────────────────────────── */
+.browse-card:active {
+  transform: translateY(-2px) scale(1.005);
+  box-shadow:
+    0 6px 24px rgba(0,0,0,0.32),
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    inset 0 -1px 0 rgba(0,0,0,0.2);
+  transition-duration: 0.1s;
+}
+
+/* Badges */
+.browse-card-badges {
+  position: absolute;
+  top: 0.6rem; left: 0.6rem;
+  display: flex; gap: 0.3rem;
+  z-index: 5;
+}
+.browse-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: 100px;
+  letter-spacing: 0.04em;
+}
+.browse-badge--sale {
+  background: #ef4444;
+  color: #fff;
+}
+.browse-badge--new {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+}
+
+/* Image area */
+.browse-card-image {
+  height: 180px;
+  background: linear-gradient(
+    175deg,
+    rgba(255,255,255,0.10) 0%,
+    rgba(255,255,255,0.03) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 18px 18px 0 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14);
+}
+
+.browse-card-emoji {
+  font-size: 5rem;
+  line-height: 1;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,0.35));
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), filter 0.4s ease;
+  will-change: transform;
+}
+.browse-card:hover .browse-card-emoji,
+.browse-card--hovered .browse-card-emoji {
+  transform: translateY(-8px) scale(1.06);
+  filter: drop-shadow(0 14px 28px rgba(0,0,0,0.4));
+}
+
+.browse-card-image img {
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.browse-card:hover .browse-card-image img,
+.browse-card--hovered .browse-card-image img {
+  transform: translateY(-6px) scale(1.04);
+}
+
+/* ── Card info area ──────────────────────────────────────────────────────── */
+.browse-card-info {
+  padding: 0.85rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  z-index: 1;
+}
+
+.browse-card-name { font-size: 0.95rem; font-weight: 700; margin: 0; }
+.browse-card-type { font-size: 0.75rem; color: rgba(255,255,255,0.45); margin: 0; }
+
+.browse-card-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.25rem;
+}
+.browse-stars { color: #f5c518; font-size: 0.7rem; letter-spacing: 0.05em; }
+.browse-rating-num { font-size: 0.68rem; color: rgba(255,255,255,0.35); }
+
+.browse-card-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+.browse-card-price    { font-size: 1rem; font-weight: 800; }
+.browse-card-original { font-size: 0.78rem; color: rgba(255,255,255,0.35); text-decoration: line-through; }
+.browse-card-unit     { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
+
+/* ── Action buttons: glassmorphic pill row ───────────────────────────────── */
+.browse-card-actions {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  gap: 0.3rem;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.22s cubic-bezier(0.16,1,0.3,1),
+    transform 0.22s cubic-bezier(0.16,1,0.3,1);
+  z-index: 10;
+}
+.browse-card-actions--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Web button styles (dark glass) */
+.browse-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(18,18,24,0.72);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  color: rgba(255,255,255,0.78);
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s,
+    transform 0.18s cubic-bezier(0.16,1,0.3,1),
+    box-shadow 0.15s;
+  box-shadow:
+    0 2px 10px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.14);
+}
+.browse-action-btn:hover {
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(20px) saturate(200%);
+  -webkit-backdrop-filter: blur(20px) saturate(200%);
+  color: #fff;
+  border-color: rgba(255,255,255,0.42);
+  transform: scale(1.1);
+  box-shadow:
+    0 4px 16px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.28);
+}
+.browse-action-btn:active {
+  transform: scale(0.93);
+  transition-duration: 0.08s;
+}
+.browse-action-btn--wishlisted {
+  color: #f87171;
+  border-color: rgba(248,113,113,0.45);
+  background: rgba(248,113,113,0.14);
+}
+.browse-action-btn--wishlisted:hover {
+  background: rgba(248,113,113,0.25);
+  border-color: rgba(248,113,113,0.65);
+}
+
+/* Empty state */
+.browse-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem;
+  color: rgba(255,255,255,0.35);
+  font-size: 0.9rem;
+}
+
+/* ── Back to browse button (detail mode) ─────────────────────────────────── */
+.browse-back-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  color: rgba(255,255,255,0.65);
+  font-size: 0.82rem;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.browse-back-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   XR MODE OVERRIDES — Light glass for PICO (visionOS style)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+html.is-spatial .browse-card {
+  --xr-background-material: translucent;
+  background: linear-gradient(
+    150deg,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.07) 40%,
+    rgba(255,255,255,0.04) 100%
+  ) !important;
+  backdrop-filter: blur(0px) !important;
+  -webkit-backdrop-filter: blur(0px) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  box-shadow:
+    0 4px 32px rgba(0,0,0,0.18),
+    inset 0 1.5px 0 rgba(255,255,255,0.38),
+    inset 0 -1px 0 rgba(0,0,0,0.10) !important;
+  border-radius: 22px;
+}
+
+html.is-spatial .browse-card::before {
+  background: linear-gradient(
+    125deg,
+    rgba(255,255,255,0.28) 0%,
+    rgba(255,255,255,0.10) 25%,
+    transparent 50%
+  );
+}
+
+html.is-spatial .browse-card:hover,
+html.is-spatial .browse-card--hovered {
+  background: linear-gradient(
+    150deg,
+    rgba(255,255,255,0.28) 0%,
+    rgba(255,255,255,0.12) 45%,
+    rgba(255,255,255,0.06) 100%
+  ) !important;
+  border-color: rgba(255,255,255,0.40) !important;
+  box-shadow:
+    0 16px 56px rgba(0,0,0,0.22),
+    0 2px 12px rgba(0,0,0,0.14),
+    inset 0 1.5px 0 rgba(255,255,255,0.50),
+    inset 0 -1px 0 rgba(0,0,0,0.08) !important;
+  transform: translateY(-6px) scale(1.015) !important;
+}
+
+/* XR: always show action buttons */
+html.is-spatial .browse-card-actions {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* XR: Light glass buttons (NOT dark grey) */
+html.is-spatial .browse-action-btn {
+  width: 44px;
+  height: 44px;
+  font-size: 1.05rem;
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  box-shadow:
+    0 2px 14px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.25) !important;
+}
+
+html.is-spatial .browse-action-btn:hover {
+  transform: scale(1.12);
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+html.is-spatial .browse-action-btn:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* XR: Wishlisted button */
+html.is-spatial .browse-action-btn--wishlisted {
+  color: #f87171 !important;
+  background: rgba(248, 113, 113, 0.2) !important;
+  border-color: rgba(248, 113, 113, 0.4) !important;
+}
+
+html.is-spatial .browse-action-btn--wishlisted:hover {
+  background: rgba(248, 113, 113, 0.3) !important;
+  border-color: rgba(248, 113, 113, 0.6) !important;
+}
+
+/* XR: image area tinted lighter */
+html.is-spatial .browse-card-image {
+  background: linear-gradient(
+    175deg,
+    rgba(255,255,255,0.16) 0%,
+    rgba(255,255,255,0.06) 100%
+  );
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.22);
+}
+
+/* XR: info separator stronger */
+html.is-spatial .browse-card-info {
+  border-top-color: rgba(255,255,255,0.14);
+}
+
+/* ── Skeleton loading pulse ────────────────────────────────────────────── */
+@keyframes glass-pulse {
+  0%, 100% { opacity: 0.45; }
+  50%       { opacity: 0.15; }
+}
+
+.browse-card[style*="pointer-events:none"] {
+  animation: glass-pulse 1.4s ease-in-out infinite;
+}
+
+/* ── Category pill — glass style upgrade ─────────────────────────────────── */
+.browse-cat-pill {
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+  transition: all 0.18s cubic-bezier(0.16,1,0.3,1);
+}
+.browse-cat-pill:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 3px 12px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.18);
+}
+.browse-cat-pill--active {
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  box-shadow:
+    0 2px 14px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.28);
+}
+
+/* XR category pills — lighter glass */
+html.is-spatial .browse-cat-pill {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.20);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.20);
+}
+html.is-spatial .browse-cat-pill--active {
+  background: rgba(255,255,255,0.22);
+  border-color: rgba(255,255,255,0.40);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.36),
+    0 2px 12px rgba(0,0,0,0.14);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   XR MODE HOVER / SPATIAL EFFECTS — PICO Controller Feedback
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Card hover glow effect (controller pointer) ────────────────────────── */
+html.is-spatial .browse-card:hover,
+html.is-spatial .browse-card:focus-within {
+  transform: translateY(-8px) scale(1.02) !important;
+  transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1) !important;
+}
+
+/* ── Pulsing ring when card is hovered (attracts attention) ─────────────── */
+html.is-spatial .browse-card:hover::before {
+  background: radial-gradient(
+    circle at var(--x, 50%) var(--y, 50%),
+    rgba(255, 255, 255, 0.35) 0%,
+    transparent 70%
+  );
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+/* ── Button hover scale + glow (controller feedback) ────────────────────── */
+html.is-spatial .browse-action-btn:hover {
+  transform: scale(1.15) !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  transition: all 0.12s cubic-bezier(0.2, 0.9, 0.4, 1.1) !important;
+}
+
+/* ── Active press feedback (controller click) ───────────────────────────── */
+html.is-spatial .browse-action-btn:active {
+  transform: scale(0.92) !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  transition: all 0.05s ease !important;
+}
+
+/* ── Category pill hover effect ─────────────────────────────────────────── */
+html.is-spatial .browse-cat-pill:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ── Floating animation for product images (subtle levitate) ────────────── */
+@keyframes xr-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+html.is-spatial .browse-card:hover .browse-card-emoji,
+html.is-spatial .browse-card:focus-within .browse-card-emoji {
+  animation: xr-float 2s ease-in-out infinite;
+}
+
+/* ── Scan line effect on hover (premium spatial feel) ───────────────────── */
+html.is-spatial .browse-card:hover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 30%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.08) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 6;
+  animation: xr-scan 1.5s ease-in-out forwards;
+}
+
+@keyframes xr-scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ── Soft pulse on floating orb (draws attention to available actions) ───── */
+@keyframes xr-pulse-gentle {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
+  }
+}
+
+/* Pulse on the FloatingAssistant orb in XR mode */
+html.is-spatial .floating-orb,
+html.is-spatial .orb-button,
+html.is-spatial [class*="Orb"],
+html.is-spatial button[style*="width: 64px"][style*="border-radius: 50%"] {
+  animation: xr-pulse-gentle 3s ease-in-out infinite;
+}
+
+/* Alternative: If you want it specifically on the orb circle */
+html.is-spatial .orb-glow,
+html.is-spatial .orb-ring {
+  animation: xr-pulse-gentle 3s ease-in-out infinite;
+}
+/* ── Focus ring for keyboard/controller navigation ──────────────────────── */
+html.is-spatial .browse-card:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.6), 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.is-spatial .browse-action-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.6), 0 0 0 4px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* ── Tilt effect on card hover (follows controller position) ────────────── */
+html.is-spatial .browse-card {
+  transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1) !important;
+  will-change: transform;
+}
+
+/* ── Micro interactions for buttons (subtle bounce) ─────────────────────── */
+@keyframes xr-micro-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+html.is-spatial .browse-action-btn--wishlisted:hover {
+  animation: xr-micro-bounce 0.3s ease;
+}
+
+
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FLOATING CATEGORIES PILL (XR mode only) — Pure Glass, No Grey
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Normal mode (web) - categories inside panel */
+.browse-categories {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  position: relative;
+  background: transparent;
+}
+
+/* XR mode - categories become independent floating glass pill at top center */
+
+.browse-categories--floating {
+  position: fixed !important;
+  top: 0.75rem !important;           /* Smaller value = higher up (closer to top edge) */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 1000 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 0.6rem !important;
+  flex-wrap: nowrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 0.6rem 1.5rem !important;
+  width: fit-content !important;
+  min-width: 200px !important;
+  max-width: calc(100vw - 2rem) !important;
+  
+  /* Pure glass background */
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(32px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
+  border: 0.5px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 60px !important;
+  
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  
+  pointer-events: auto;
+  animation: xr-categories-drop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes xr-categories-drop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Floating category pill buttons - pure glass */
+html.is-spatial .browse-categories--floating .browse-cat-pill {
+  padding: 0.45rem 1.2rem !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  
+  /* Pure glass button */
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 0.5px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 40px !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+  box-shadow: none !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+html.is-spatial .browse-categories--floating .browse-cat-pill:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+html.is-spatial .browse-categories--floating .browse-cat-pill--active {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Hide the original categories container in XR mode */
+html.is-spatial .browse-categories:not(.browse-categories--floating) {
+  display: none !important;
+}
+
+/* Gentle pulse on the floating pill (subtle, not distracting) */
+@keyframes xr-pill-subtle {
+  0%, 100% { 
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+  50% { 
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  }
+}
+
+html.is-spatial .browse-categories--floating {
+  animation: xr-categories-drop 0.35s cubic-bezier(0.16, 1, 0.3, 1), xr-pill-subtle 4s ease-in-out infinite;
+}
+
+/* ── NAV PILL: centered, not stretched ───────────────────────────────────────
+
+/* The sidenav pill: auto height, centered, with spatial glass */
+.browse-sidenav {
+  height: auto !important;   /* not full height */
+  align-self: center;
+  border-radius: 28px !important;
+  padding: 0.75rem 0 !important;
+  margin: 0 0 0 1rem;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  position: sticky;
+  top: 50%;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.08) !important; /* glass on web */
+}
+
+/* Sidenav buttons: circle style */
+.sidenav-btn {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  font-size: 1.1rem !important;
+}
+
+/* Web only - glass panel styling */
+.xr-single-panel-root,
+.spatial-panel {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* XR mode - remove glass styling ONLY from main container, NOT from navbar */
+html.is-spatial .xr-single-panel-root {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+}
+
+/* Keep the navbar glass styling in XR mode */
+html.is-spatial .browse-sidenav.spatial-panel {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 28px !important;
+  backdrop-filter: blur(20px) !important;
+}

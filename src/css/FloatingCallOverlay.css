@@ -1,0 +1,829 @@
+/* FloatingCallOverlay.css - Apple Vision Pro glass style */
+
+/* Minimized pill */  
+.call-minimized {
+  position: fixed; 
+  z-index: 9999;
+  cursor: grab;
+  user-select: none;
+}
+
+/* XR: anchor pill to top-center instead of JS drag position */
+html.is-spatial .call-minimized {
+  left: 50% !important;
+  top: 1rem !important;
+  transform: translateX(-50%);
+}
+
+.call-minimized-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 1rem;
+  border-radius: 100px;
+  cursor: pointer;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(52px) saturate(1.8) brightness(1.15);
+  -webkit-backdrop-filter: blur(52px) saturate(1.8) brightness(1.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  transition: all 0.2s;
+}
+
+.call-minimized-pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: scale(1.02);
+}
+
+.call-live-dot {
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #ef4444;
+  animation: call-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes call-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+.call-minimized-text {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.call-minimized-room {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.08em;
+  font-family: monospace;
+}
+
+.call-minimized-expand {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* Full call panel */
+.call-panel-container {
+  position: fixed;
+  z-index: 9999;
+  width: 660px;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* XR / Pico: ignore JS drag position, fill the spatial window instead */
+html.is-spatial .call-panel-container {
+  position: fixed;
+  inset: 0;
+  width: auto;
+  height: auto;
+  left: 0 !important;
+  top: 0 !important;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.call-panel {
+  pointer-events: auto;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(60px) saturate(1.8) brightness(1.15);
+  -webkit-backdrop-filter: blur(60px) saturate(1.8) brightness(1.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 40px 100px rgba(0, 0, 0, 0.4);
+}
+
+/* XR mode */
+html.is-spatial .call-panel {
+  --xr-background-material: translucent;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(70px) saturate(2) brightness(1.2);
+  border-color: rgba(255, 255, 255, 0.25);
+  /* Fill XR window width, cap height so nothing overflows */
+  width: 100%;
+  max-width: 100%;
+  max-height: 95vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+}
+
+/* Header */
+.call-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: grab;
+  flex-wrap: wrap;
+}
+
+.call-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.call-room-code {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.2rem 0.6rem 0.2rem 0.8rem;
+  border-radius: 20px;
+  margin-left: 0.25rem;
+}
+
+.call-room-code-icon {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.call-room-code-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-family: monospace;
+  color: #fff;
+}
+
+.call-copy-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.65rem;
+  padding: 0.2rem 0.6rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.call-copy-btn.copied {
+  background: #10b981;
+}
+
+.call-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.call-header-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 0.35rem;
+}
+
+.call-minimize-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.call-minimize-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.call-end-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ef4444;
+  border: none;
+  color: #fff;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.call-end-btn:hover {
+  background: #dc2626;
+  transform: scale(1.05);
+}
+
+/* Connection status */
+.call-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem 1rem;
+  font-size: 0.7rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.call-status-room {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.call-status-connected {
+  color: #34d399;
+}
+
+.call-status-disconnected {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Video grid */
+.call-video-grid {
+  display: flex;
+  gap: 3px;
+  padding: 0.5rem;
+  height: 280px;
+}
+
+/* XR: flex-based height so grid doesn't overflow the spatial window */
+html.is-spatial .call-video-grid {
+  height: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.call-video-tile {
+  flex: 1;
+  background: #111;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.call-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.call-video-mirror {
+  transform: scaleX(-1);
+}
+
+.call-avatar {
+  text-align: center;
+}
+
+.call-avatar-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #000;
+  margin: 0 auto 0.5rem;
+}
+
+.call-avatar-name {
+  font-size: 0.75rem;
+  color: #fff;
+  margin: 0;
+}
+
+.call-video-label {
+  position: absolute;
+  bottom: 8px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 100px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.68rem;
+  color: #fff;
+}
+
+.call-remote-tiles {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.call-waiting {
+  flex: 1;
+  background: #111;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-direction: column;
+  gap: 8px;
+}
+
+.call-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: call-spin 1s linear infinite;
+}
+
+@keyframes call-spin {
+  to { transform: rotate(360deg); }
+}
+
+.call-waiting-text {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  padding: 0 1rem;
+}
+
+/* Controls bar */
+.call-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.call-control-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.call-control-btn:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.call-control-btn-active {
+  background: #10b981;
+  border-color: #10b981;
+}
+
+.call-control-btn-muted {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.call-end-call-btn {
+  height: 44px;
+  padding: 0 1.75rem;
+  border-radius: 100px;
+  background: #ef4444;
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.call-end-call-btn:hover {
+  background: #dc2626;
+  transform: scale(1.02);
+}
+
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FLOATING CALL OVERLAY
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Backdrop for collab lobby modal */
+.floating-overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+/* Root wrapper for floating call — sits over catalog */
+.floating-call-root {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+  pointer-events: none;
+}
+.floating-call-root > * { pointer-events: auto; }
+
+/* The 3D model floats to the left of the call panel */
+.floating-3d-model {
+  position: fixed;
+  bottom: 220px;
+  right: 340px;
+  width: 280px;
+  height: 280px;
+  pointer-events: auto;
+  z-index: 140;
+}
+
+/* The call panel itself */
+.floating-call-panel {
+  width: 320px;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.fcp-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.fcp-room        { font-size: 0.82rem; font-weight: 600; flex: 1; color: rgba(255,255,255,0.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fcp-timer       { font-size: 0.78rem; color: rgba(255,255,255,0.4); font-variant-numeric: tabular-nums; }
+.fcp-minimize-btn { background: none; border: none; color: rgba(255,255,255,0.4); cursor: pointer; font-size: 1.1rem; padding: 0 0.25rem; }
+
+/* Participant grid */
+.fcp-grid        { display: grid; gap: 2px; }
+.fcp-grid--1     { grid-template-columns: 1fr; }
+.fcp-grid--2     { grid-template-columns: 1fr 1fr; }
+.fcp-grid--3     { grid-template-columns: 1fr 1fr; }
+.fcp-grid--4     { grid-template-columns: 1fr 1fr; }
+
+.fcp-tile {
+  position: relative;
+  background: rgba(30,30,30,0.9);
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+.fcp-tile--speaking { border-color: #34d399; }
+.fcp-video  { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); display: block; }
+.fcp-avatar { width: 100%; height: 100%; min-height: 100px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: #000; }
+.fcp-name   { position: absolute; bottom: 0.35rem; left: 0.5rem; font-size: 0.7rem; color: rgba(255,255,255,0.85); background: rgba(0,0,0,0.5); border-radius: 4px; padding: 0.1rem 0.35rem; }
+
+/* Model share row */
+.fcp-model-row   { display: flex; align-items: center; gap: 0.35rem; padding: 0.5rem 0.75rem; border-top: 1px solid rgba(255,255,255,0.06); }
+.fcp-model-label { font-size: 0.7rem; color: rgba(255,255,255,0.4); flex-shrink: 0; }
+.fcp-model-btn   { width: 28px; height: 28px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+.fcp-model-btn:hover, .fcp-model-btn--active { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.3); }
+
+/* Controls bar */
+.fcp-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.fcp-ctrl      { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.08); color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.fcp-ctrl:hover { background: rgba(255,255,255,0.18); }
+.fcp-ctrl--off  { background: rgba(255,80,80,0.2); border-color: rgba(255,80,80,0.4); }
+.fcp-ctrl--end  { width: 40px; height: 40px; border-radius: 50%; border: none; background: #ef4444; color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+.fcp-ctrl--end:hover { background: #dc2626; }
+
+
+.call-min-avatars { display: flex; }
+.call-min-avatar  { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; color: #000; margin-right: -4px; border: 1px solid rgba(0,0,0,0.3); }
+.call-min-timer   { font-size: 0.78rem; color: rgba(255,255,255,0.6); font-variant-numeric: tabular-nums; padding-left: 0.4rem; }
+.call-min-expand  { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+
+/* Waiting placeholder tile */
+.fcp-tile--waiting {
+  opacity: 0.4;
+}
+.fcp-tile--has-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+  display: block;
+}
+
+/* ── Full-panel call (PICO spatial scene) ────────────────────────────────── */
+.collab-call-fullpanel {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   DESKTOP ROOT LAYOUT — multi-column with persistent call panel
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Base layout: flex row, all columns side by side */
+.desktop-root {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 100svh;
+  gap: 1.5rem;
+  padding: 2rem 1.5rem;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+/* Right column: stacks RightPanel + optional ColabLobby vertically */
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 260px;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+/* Call column: appears to the far right when call is active */
+.call-column {
+  width: 660px;
+  flex-shrink: 0;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Wrapper gives the call panel a consistent container */
+.call-panel-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Header bar above FloatingCallOverlay */
+.call-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 100px;
+}
+.call-panel-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex: 1;
+}
+
+/* Minimized pill */
+.call-minimized-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 1rem;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.call-minimized-pill:hover { background: rgba(255,255,255,0.12); }
+
+
+
+/* ── Call side panel helper CSS ─────────────────────────────────────── */
+.call-side-panel { display: flex; flex-direction: column; gap: 0; }
+.call-side-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.call-side-title { font-size: 0.92rem; font-weight: 700; }
+.call-close-btn { background: none; border: none; color: rgba(255,255,255,0.4); cursor: pointer; font-size: 1rem; }
+.call-lobby-content { display: flex; flex-direction: column; gap: 0.75rem; padding: 1rem 1.25rem 1.25rem; }
+.call-lobby-avatar { font-size: 2.5rem; text-align: center; }
+
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CONTROL BANNERS  — issues #7, #8
+   ══════════════════════════════════════════════════════════════════════════ */
+.control-banner-wrap {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: center;
+  pointer-events: none;
+}
+.control-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.85rem 0.45rem 1rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: auto;
+  backdrop-filter: blur(16px);
+  border: 1px solid transparent;
+  animation: banner-slide-down 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes banner-slide-down { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+.control-banner--active  { background: rgba(16,185,129,0.25); border-color: rgba(16,185,129,0.4); color: #6ee7b7; }
+.control-banner--given   { background: rgba(251,146,60,0.2);  border-color: rgba(251,146,60,0.35); color: #fcd34d; }
+.control-banner--request { background: rgba(99,102,241,0.2);  border-color: rgba(99,102,241,0.4);  color: #c4b5fd; }
+
+.control-revoke-btn {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px; color: rgba(255,255,255,0.7);
+  font-size: 0.7rem; padding: 0.2rem 0.6rem; cursor: pointer;
+  transition: background 0.15s;
+}
+.control-revoke-btn:hover { background: rgba(255,255,255,0.2); }
+.control-accept-btn {
+  background: rgba(16,185,129,0.25); border: 1px solid rgba(16,185,129,0.5);
+  border-radius: 100px; color: #6ee7b7;
+  font-size: 0.7rem; padding: 0.2rem 0.7rem; cursor: pointer; font-weight: 700;
+}
+.control-deny-btn {
+  background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.4);
+  border-radius: 100px; color: #fca5a5;
+  font-size: 0.7rem; padding: 0.2rem 0.6rem; cursor: pointer;
+}
+
+
+.xr-toolbar-window {
+  width: 80px;
+  padding: 0.75rem 0.5rem;
+  background: rgba(20,20,30,0.85);
+  backdrop-filter: blur(20px);
+  border-radius: 40px;
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+.xr-toolbar-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.xr-toolbar-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.xr-toolbar-btn:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.05);
+}
+.xr-toolbar-badge {
+  font-size: 0.65rem;
+  background: #10b981;
+  color: white;
+  padding: 0.2rem 0.4rem;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   COLLAB LOBBY POPUP  — issue #4 (compact, better glass)
+   ══════════════════════════════════════════════════════════════════════════ */
+.collab-lobby-popup {
+  position: fixed;
+  bottom: 5.5rem;
+  right: 1.25rem;
+  z-index: 800;
+  width: 300px;
+  animation: popup-rise 0.25s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes popup-rise { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: none; } }
+
+/* Override collab-panel sizing for popup context */
+.collab-lobby-popup .collab-panel {
+  background: rgba(18,18,22,0.88) !important;
+  backdrop-filter: blur(40px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.6) !important;
+  border-radius: 20px !important;
+  padding: 1.25rem !important;
+}
+.collab-lobby-popup .collab-title-large { font-size: 1rem !important; }
+.collab-lobby-popup .collab-subtitle   { font-size: 0.75rem !important; }
+.collab-lobby-popup .collab-note       { font-size: 0.68rem !important; }
+
+
+
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   COLLABORATION PANEL
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.collab-panel {
+  width: 320px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.collab-title-large  { font-size: 1.2rem; font-weight: 800; margin: 0; }
+.collab-subtitle     { font-size: 0.82rem; color: rgba(255,255,255,0.5); margin: 0; line-height: 1.5; }
+.collab-title        { font-size: 1rem; font-weight: 700; }
+.collab-section-label { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.07em; }
+
+.collab-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.collab-live-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 0 3px rgba(52,211,153,0.25);
+  animation: live-pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes live-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+.collab-room-code { margin-left: auto; font-size: 0.82rem; font-weight: 800; letter-spacing: 0.1em; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.08); padding: 0.2rem 0.6rem; border-radius: 6px; }
+
+.collab-participants  { display: flex; flex-direction: column; gap: 0.5rem; }
+.collab-participant   { display: flex; align-items: center; gap: 0.6rem; }
+.collab-avatar        { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; color: #000; flex-shrink: 0; }
+.collab-participant-name { font-size: 0.88rem; flex: 1; }
+.collab-you-badge     { font-size: 0.68rem; background: rgba(255,255,255,0.12); border-radius: 4px; padding: 0.1rem 0.4rem; color: rgba(255,255,255,0.5); }
+
+.collab-activity      { display: flex; flex-direction: column; gap: 0.3rem; }
+.collab-activity-item { font-size: 0.75rem; color: rgba(255,255,255,0.45); padding: 0.25rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+.collab-share-row     { display: flex; align-items: center; gap: 0.6rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 0.5rem 0.75rem; }
+.collab-share-code    { font-size: 1rem; font-weight: 800; letter-spacing: 0.12em; flex: 1; }
+.collab-copy-btn      { background: rgba(255,255,255,0.1); border: none; border-radius: 8px; color: #fff; font-size: 0.78rem; padding: 0.3rem 0.7rem; cursor: pointer; white-space: nowrap; }
+
+.collab-field         { display: flex; flex-direction: column; gap: 0.35rem; }
+.collab-field-label   { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+.collab-input         { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: #fff; font-size: 0.9rem; padding: 0.6rem 0.85rem; outline: none; width: 100%; }
+.collab-input:focus   { border-color: rgba(255,255,255,0.4); }
+.collab-input::placeholder { color: rgba(255,255,255,0.3); }
+.collab-code-input    { letter-spacing: 0.12em; font-weight: 700; flex: 1; }
+
+.collab-create-btn    { padding: 0.75rem; border-radius: 100px; border: none; background: rgba(255,255,255,0.15); color: #fff; font-size: 0.92rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+.collab-create-btn:hover:not(:disabled) { background: rgba(255,255,255,0.25); }
+.collab-create-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.collab-divider       { display: flex; align-items: center; gap: 0.75rem; color: rgba(255,255,255,0.3); font-size: 0.75rem; }
+.collab-divider::before, .collab-divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+
+.collab-join-row      { display: flex; gap: 0.5rem; }
+.collab-join-btn      { padding: 0.6rem 1rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: #fff; font-size: 0.88rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.collab-join-btn:hover:not(:disabled) { background: rgba(255,255,255,0.15); }
+.collab-join-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.collab-leave-btn     { padding: 0.6rem; border-radius: 100px; border: 1px solid rgba(248,113,113,0.3); background: rgba(248,113,113,0.08); color: #f87171; font-size: 0.82rem; cursor: pointer; transition: background 0.15s; }
+.collab-leave-btn:hover { background: rgba(248,113,113,0.18); }
+
+.collab-error         { color: #f87171; font-size: 0.8rem; margin: 0; }
+.collab-note          { font-size: 0.72rem; color: rgba(255,255,255,0.3); margin: 0; line-height: 1.5; }

@@ -1,0 +1,364 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   CartPage.css — Apple Vision Pro glossy glass cart
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Page wrapper (CartPage standalone window) ───────────────────────────── */
+.cart-page-root {
+  width: 100%;
+  height: 100vh;
+}
+
+/* In non-XR / web mode give a visible dark backdrop */
+@media not all and (display-mode: immersive-vr) {
+  .cart-page-root {
+    background: rgba(20, 20, 30, 0.92);
+  }
+}
+
+/* 🔥 XR Mode - Use WebSpatial translucent material for real-time glossy glass */
+html.is-spatial .cart-page-root {
+  position: fixed;
+  inset: 0;
+  height: auto;
+  background: transparent;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  --xr-background-material: transparent;
+}
+
+/* ── Main drawer card with glossy glass effect ───────────────────────────── */
+.cart-drawer {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+
+  /* 🔥 Glossy glass effect for web mode */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(40px) saturate(2) brightness(1.2);
+  -webkit-backdrop-filter: blur(40px) saturate(2) brightness(1.2);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 32px 96px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+  height: auto;
+  max-height: 85vh;
+  overflow: hidden;
+  color: #fff;
+}
+
+/* 🔥 XR Mode - Use WebSpatial translucent material for real-time glossy glass */
+html.is-spatial .cart-drawer {
+  --xr-background-material: translucent;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(60px) saturate(2.2) brightness(1.3);
+  border-color: rgba(255, 255, 255, 0.35);
+  border-radius: 36px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.02);
+  height: auto;
+  max-height: 85vh;
+  position: relative;
+  inset: auto;
+}
+
+/* Add glossy shine overlay */
+.cart-drawer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+  border-radius: 32px;
+}
+
+/* When rendered as the sole window (CartPage route) fill the space */
+.cart-page-root .cart-drawer {
+  max-width: 420px;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.cart-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+}
+
+.cart-drawer-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* close / X button — glass style */
+.cart-close-btn,
+.cart-drawer-header .assistant-clear-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  backdrop-filter: blur(4px);
+}
+.cart-close-btn:hover,
+.cart-drawer-header .assistant-clear-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── Empty state ──────────────────────────────────────────────────────────── */
+.cart-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 3rem 1.5rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+  text-align: center;
+}
+.cart-empty p {
+  margin: 0;
+}
+
+/* ── Items list ───────────────────────────────────────────────────────────── */
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+
+/* ── Single item card ─────────────────────────────────────────────────────── */
+.cart-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.9rem 1rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.2s;
+  backdrop-filter: blur(10px);
+}
+
+.cart-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: scale(1.01);
+}
+
+html.is-spatial .cart-item {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+}
+
+/* Thumbnail */
+.cart-item-thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.cart-item-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Body */
+.cart-item-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.cart-item-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.cart-item-type {
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 0.25rem;
+}
+
+/* Controls row: qty stepper + price */
+.cart-item-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.15rem;
+}
+
+.cart-qty-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 100px;
+  padding: 0.2rem 0.6rem;
+}
+
+.cart-qty-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.14s;
+}
+.cart-qty-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.cart-qty-num {
+  font-size: 0.9rem;
+  font-weight: 700;
+  min-width: 20px;
+  text-align: center;
+  color: #fff;
+}
+
+.cart-item-price {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* Footer */
+.cart-footer {
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.cart-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.cart-total-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.02em;
+}
+
+.cart-total-amount {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.cart-checkout-btn {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(230, 230, 240, 0.9));
+  color: #1a1a2e;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cart-checkout-btn:hover {
+  background: linear-gradient(135deg, #fff, #e8e8f0);
+  transform: scale(1.02);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.cart-delivery-note {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+  margin: 0;
+}
+
+/* ── Drawer slide animation ───────────────────────────────────────────────── */
+.cart-drawer-wrap {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 380px;
+  height: auto;
+  z-index: 860;
+  animation: drawer-slide-in 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes drawer-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

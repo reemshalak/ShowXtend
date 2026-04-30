@@ -1,0 +1,466 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   CompareView.css — Apple Vision Pro glossy glass product comparison
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Root ────────────────────────────────────────────────────────────────── */
+.cv-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  min-height: 100svh;
+  width: 100%;
+  background: transparent;
+  box-sizing: border-box;
+  gap: 0;
+}
+
+/* ── Nav pill (top) ──────────────────────────────────────────────────────── */
+.cv-nav-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(52px) saturate(1.8) brightness(1.15);
+  -webkit-backdrop-filter: blur(52px) saturate(1.8) brightness(1.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 40px;
+  margin-bottom: 1.75rem;
+  width: fit-content;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+html.is-spatial .cv-nav-pill {
+  --xr-background-material: translucent;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(60px) saturate(2) brightness(1.2);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.cv-nav-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.cv-nav-icon:hover { 
+  background: rgba(255, 255, 255, 0.15); 
+  color: #fff;
+  transform: scale(1.05);
+}
+.cv-nav-icon--active {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+.cv-nav-close {
+  margin-left: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+}
+.cv-nav-close:hover { 
+  background: rgba(239, 68, 68, 0.2); 
+  color: #fca5a5;
+}
+
+/* ── Stage (the main glass panel) ───────────────────────────────────────── */
+.cv-stage {
+  display: grid;
+  grid-template-columns: 1fr 72px 1fr;
+  grid-template-rows: auto auto;
+  width: 100%;
+  max-width: 960px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(52px) saturate(1.8) brightness(1.15);
+  -webkit-backdrop-filter: blur(52px) saturate(1.8) brightness(1.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+html.is-spatial .cv-stage {
+  --xr-background-material: translucent;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(60px) saturate(2) brightness(1.2);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Glossy shine overlay */
+.cv-stage::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* ── Slot ────────────────────────────────────────────────────────────────── */
+.cv-slot {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 2rem 1.75rem;
+  min-height: 380px;
+  position: relative;
+  transition: background 0.4s ease;
+}
+.cv-slot--left  { border-right: 1px solid rgba(255, 255, 255, 0.1); }
+.cv-slot--right { border-left: 1px solid rgba(255, 255, 255, 0.1); }
+.cv-slot--filled { background: rgba(255, 255, 255, 0.05); }
+
+/* ── Empty slot ──────────────────────────────────────────────────────────── */
+.cv-empty-slot {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  opacity: 0.5;
+  user-select: none;
+}
+.cv-empty-ring {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1;
+}
+.cv-empty-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+/* ── Filled slot content ─────────────────────────────────────────────────── */
+.cv-product-in-slot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  opacity: 0;
+  transform: translateY(20px) scale(0.97);
+  transition: opacity 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cv-product-in-slot--visible {
+  opacity: 1;
+  transform: none;
+}
+
+.cv-slot-name {
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+.cv-slot-sub {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+.cv-slot-image {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 170px;
+  margin: 1.5rem 0;
+}
+
+.cv-slot-price {
+  font-size: 38px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -0.03em;
+  margin-top: auto;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+.cv-slot-price-note {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  margin-top: 3px;
+}
+
+/* Purchase button — top right of slot */
+.cv-purchase-btn {
+  position: absolute;
+  top: 1.75rem;
+  right: 1.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 7px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+  backdrop-filter: blur(4px);
+}
+.cv-purchase-btn:hover { 
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+}
+
+/* ── Center column (VS) ──────────────────────────────────────────────────── */
+.cv-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 0;
+  gap: 10px;
+}
+.cv-center-line {
+  flex: 1;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.15) 25%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent
+  );
+}
+.cv-vs {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+  backdrop-filter: blur(4px);
+}
+
+/* ── Comparison table section ────────────────────────────────────────────── */
+.cv-compare-section {
+  grid-column: 1 / -1;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.5rem 2rem 2rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cv-compare-section--visible {
+  opacity: 1;
+  transform: none;
+}
+
+.cv-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.cv-th-spec,
+.cv-th-val {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0 0 12px;
+}
+.cv-th-spec { text-align: left; width: 30%; }
+.cv-th-val  { text-align: center; width: 35%; }
+
+.cv-row + .cv-row td { border-top: 1px solid rgba(255, 255, 255, 0.06); }
+
+.cv-cell {
+  padding: 10px 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  vertical-align: middle;
+}
+.cv-cell:nth-child(2),
+.cv-cell:nth-child(3) { text-align: center; }
+
+.cv-cell--label {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  text-align: left !important;
+}
+.cv-cell--win  { color: #4ade80; font-weight: 600; }
+.cv-cell--lose { color: rgba(255, 255, 255, 0.35); }
+
+/* Better badge */
+.cv-win-badge {
+  display: inline-block;
+  margin-left: 6px;
+  background: rgba(74, 222, 128, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #4ade80;
+  animation: cv-badge-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes cv-badge-in {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Catalog strip ───────────────────────────────────────────────────────── */
+.cv-catalog-label {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 1.75rem 0 0.85rem;
+  max-width: 960px;
+  width: 100%;
+}
+.cv-catalog-strip {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 960px;
+}
+
+.cv-catalog-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  min-width: 90px;
+  position: relative;
+  backdrop-filter: blur(4px);
+}
+.cv-catalog-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Left = blue tint, Right = purple tint */
+.cv-catalog-card--left {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.08);
+}
+.cv-catalog-card--right {
+  border-color: rgba(168, 85, 247, 0.5);
+  background: rgba(168, 85, 247, 0.08);
+}
+.cv-catalog-card--left.cv-catalog-card--right {
+  border-color: rgba(236, 72, 153, 0.5);
+  background: rgba(236, 72, 153, 0.06);
+}
+
+.cv-catalog-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  line-height: 1.3;
+}
+.cv-catalog-price {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Selection indicator dots */
+.cv-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: cv-dot-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cv-dot--left  { background: #3B82F6; right: 16px; box-shadow: 0 0 6px #3B82F6; }
+.cv-dot--right { background: #A855F7; box-shadow: 0 0 6px #A855F7; }
+
+@keyframes cv-dot-in {
+  from { opacity: 0; transform: scale(0); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Bottom strip ────────────────────────────────────────────────────────── */
+.cv-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+.cv-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 28px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s;
+  backdrop-filter: blur(4px);
+}
+.cv-all-btn:hover { 
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.02);
+}
+
+.cv-chevron {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ── XR transparent root override ───────────────────────────────────────── */
+html.is-spatial .cv-root {
+  background: transparent;
+}

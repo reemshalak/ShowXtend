@@ -1,0 +1,1035 @@
+/* FloatingAssistant.css — Apple visionOS Spatial Design */
+
+/* ─── CSS Variables ─────────────────────────────────────── */
+:root {
+  --fa-glass-bg:        rgba(10, 12, 22, 0.82);
+  --fa-glass-border:    rgba(255, 255, 255, 0.13);
+  --fa-glass-blur:      saturate(1.8) blur(48px);
+  --fa-text-primary:    rgba(255, 255, 255, 0.95);
+  --fa-text-secondary:  rgba(255, 255, 255, 0.45);
+  --fa-accent-blue:     #3b82f6;
+  --fa-accent-teal:     #2dd4bf;
+  --fa-accent-violet:   #a78bfa;
+  --fa-green:           #34d399;
+  --fa-radius-panel:    24px;
+  --fa-shadow-panel:    0 32px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+/* ─── Panel Container ───────────────────────────────────── */
+.floating-assistant-panel {
+  position: fixed;
+  bottom: 5.5rem;
+  right: 1.5rem;
+  width: 350px;
+  height: 82vh;
+  border-radius: var(--fa-radius-panel);
+  background: var(--fa-glass-bg);
+  backdrop-filter: var(--fa-glass-blur);
+  -webkit-backdrop-filter: var(--fa-glass-blur);
+  border: 1px solid var(--fa-glass-border);
+  box-shadow: var(--fa-shadow-panel),
+              inset 0 1px 0 rgba(255, 255, 255, 0.12),
+              inset 0 0 60px rgba(59, 130, 246, 0.04);
+  display: flex;
+  flex-direction: column;
+  z-index: 900;
+  overflow: hidden;
+  animation: fa-rise 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Specular top sheen */
+.floating-assistant-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    160deg,
+    rgba(255,255,255,0.055) 0%,
+    transparent 35%,
+    transparent 65%,
+    rgba(59,130,246,0.04) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Header ────────────────────────────────────────────── */
+.floating-assistant-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, transparent 100%);
+  flex-shrink: 0;
+  border-radius: var(--fa-radius-panel) var(--fa-radius-panel) 0 0;
+  position: relative;
+  z-index: 1;
+}
+
+.floating-assistant-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.floating-assistant-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.floating-assistant-status-dot--idle {
+  background: var(--fa-green);
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.8);
+}
+.floating-assistant-status-dot--listening {
+  background: var(--fa-accent-teal);
+  box-shadow: 0 0 8px rgba(45, 212, 191, 0.8);
+  animation: fa-pulse-med 1.2s ease-in-out infinite;
+}
+.floating-assistant-status-dot--processing {
+  background: var(--fa-accent-violet);
+  box-shadow: 0 0 8px rgba(167, 139, 250, 0.8);
+  animation: fa-pulse-med 1.2s ease-in-out infinite;
+}
+.floating-assistant-status-dot--speaking {
+  background: var(--fa-accent-blue);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.8);
+  animation: fa-pulse-med 1.2s ease-in-out infinite;
+}
+
+.floating-assistant-status-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--fa-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.floating-assistant-tier {
+  font-size: 0.62rem;
+  font-weight: 500;
+  border-radius: 999px;
+  padding: 2px 8px;
+  letter-spacing: 0.02em;
+}
+.floating-assistant-tier--gemini {
+  background: rgba(167, 139, 250, 0.18);
+  border: 1px solid rgba(167, 139, 250, 0.35);
+  color: #c4b5fd;
+}
+.floating-assistant-tier--local {
+  background: rgba(52, 211, 153, 0.15);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  color: #6ee7b7;
+}
+
+.floating-assistant-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.floating-assistant-context {
+  font-size: 0.64rem;
+  color: var(--fa-text-secondary);
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.floating-assistant-cart-pill {
+  font-size: 0.62rem;
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.38);
+  color: #93c5fd;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.floating-assistant-cart-pill:hover {
+  background: rgba(59, 130, 246, 0.32);
+}
+
+.floating-assistant-budget-pill {
+  font-size: 0.62rem;
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.28);
+  color: #6ee7b7;
+}
+.floating-assistant-budget-pill--over {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+}
+
+.floating-assistant-voice-toggle,
+.floating-assistant-clear-btn,
+.floating-assistant-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.32);
+  transition: color 0.2s;
+  line-height: 1;
+}
+.floating-assistant-voice-toggle:hover,
+.floating-assistant-clear-btn:hover,
+.floating-assistant-close-btn:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ─── Messages Feed ─────────────────────────────────────── */
+.floating-assistant-feed {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.09) transparent;
+  position: relative;
+  z-index: 1;
+}
+.floating-assistant-feed::-webkit-scrollbar { width: 3px; }
+.floating-assistant-feed::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.09);
+  border-radius: 2px;
+}
+
+/* ─── Welcome / Command Grid ────────────────────────────── */
+.floating-assistant-welcome {
+  padding: 16px 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.floating-assistant-welcome-orb {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 32%,
+    rgba(255,255,255,0.55) 0%,
+    rgba(59,130,246,0.7) 38%,
+    rgba(45,212,191,0.5) 80%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 24px rgba(59,130,246,0.55),
+    0 0 48px rgba(45,212,191,0.25),
+    inset 0 1px 2px rgba(255,255,255,0.6);
+  animation: fa-orb-breathe 3.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.floating-assistant-welcome-text {
+  font-size: 0.82rem;
+  color: var(--fa-text-secondary);
+  text-align: center;
+  line-height: 1.5;
+}
+.floating-assistant-welcome-text strong {
+  color: rgba(255,255,255,0.8);
+  font-weight: 600;
+}
+
+.floating-assistant-commands-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  width: 100%;
+}
+
+.floating-assistant-command-card {
+  border-radius: 14px;
+  padding: 11px 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.floating-assistant-command-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: rgba(255,255,255,0.18);
+  border-radius: inherit;
+}
+.floating-assistant-command-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+  filter: brightness(1.15);
+}
+.floating-assistant-command-card:active { transform: scale(0.97); }
+
+.floating-assistant-command-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.floating-assistant-command-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.2;
+}
+.floating-assistant-command-desc {
+  font-size: 0.62rem;
+  color: var(--fa-text-secondary);
+  line-height: 1.3;
+}
+
+.floating-assistant-command-card--blue   { background: rgba(59,130,246,0.18); }
+.floating-assistant-command-card--teal   { background: rgba(45,212,191,0.14); }
+.floating-assistant-command-card--violet { background: rgba(167,139,250,0.17); }
+.floating-assistant-command-card--green  { background: rgba(52,211,153,0.14); }
+.floating-assistant-command-card--amber  { background: rgba(251,191,36,0.14); }
+.floating-assistant-command-card--rose   { background: rgba(251,113,133,0.14); }
+
+/* ─── Message Bubbles ───────────────────────────────────── */
+.floating-assistant-bubble {
+  display: flex;
+  margin-bottom: 6px;
+  padding: 0 4px;
+}
+.floating-assistant-bubble--user      { justify-content: flex-end; }
+.floating-assistant-bubble--assistant { justify-content: flex-start; }
+
+.floating-assistant-bubble-content {
+  max-width: 80%;
+  padding: 9px 13px;
+  border-radius: 18px;
+  font-size: 0.84rem;
+  line-height: 1.48;
+  word-break: break-word;
+  color: #fff;
+}
+.floating-assistant-bubble--user .floating-assistant-bubble-content {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border-radius: 18px 18px 4px 18px;
+  box-shadow: 0 2px 16px rgba(37, 99, 235, 0.45),
+              inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.floating-assistant-bubble--assistant .floating-assistant-bubble-content {
+  background: rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 18px 18px 18px 4px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.2),
+              inset 0 1px 0 rgba(255,255,255,0.09);
+}
+
+.floating-assistant-bubble-badge {
+  margin-top: 6px;
+  font-size: 0.68rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 2px 8px;
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ─── Loading ───────────────────────────────────────────── */
+.floating-assistant-loading {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0 4px;
+  margin-bottom: 6px;
+}
+.floating-assistant-loading-bubble {
+  padding: 10px 14px;
+  border-radius: 18px 18px 18px 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  font-size: 0.84rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+.floating-assistant-loading-text { font-size: 0.72rem; }
+.floating-assistant-loading-dots { letter-spacing: 3px; }
+
+/* ─── Quick Prompts ─────────────────────────────────────── */
+.floating-assistant-quick-prompts {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  padding: 6px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.floating-assistant-quick-prompt {
+  font-size: 0.68rem;
+  font-weight: 500;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  color: rgba(255, 255, 255, 0.58);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.floating-assistant-quick-prompt:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+/* ─── Input Row ─────────────────────────────────────────── */
+.floating-assistant-input-row {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  flex-shrink: 0;
+  border-radius: 0 0 var(--fa-radius-panel) var(--fa-radius-panel);
+  position: relative;
+  z-index: 1;
+}
+
+.floating-assistant-mic-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.12);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.09);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.floating-assistant-mic-btn--active {
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.85), rgba(59, 130, 246, 0.75));
+  border-color: transparent;
+  box-shadow: 0 0 16px rgba(45, 212, 191, 0.45);
+}
+
+.floating-assistant-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 999px;
+  padding: 8px 14px;
+  color: #fff;
+  font-size: 0.84rem;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.floating-assistant-input:focus {
+  outline: none;
+  border-color: rgba(59, 130, 246, 0.45);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+.floating-assistant-input::placeholder { color: rgba(255, 255, 255, 0.25); }
+
+.floating-assistant-send-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: none;
+  cursor: default;
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.35;
+  transition: all 0.2s;
+}
+.floating-assistant-send-btn--active {
+  cursor: pointer;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  opacity: 1;
+  box-shadow: 0 2px 12px rgba(37, 99, 235, 0.5);
+}
+
+/* ─── ORB Container ─────────────────────────────────────── */
+.floating-assistant-orb-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 910;
+}
+
+/* ─── ORB Button ────────────────────────────────────────── */
+.floating-assistant-orb {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+/* Aura — outer ambient glow */
+.floating-assistant-orb-aura {
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.floating-assistant-orb--idle .floating-assistant-orb-aura {
+  background: radial-gradient(circle,
+    rgba(52, 211, 153, 0.5) 0%,
+    rgba(45, 212, 191, 0.25) 40%,
+    transparent 70%
+  );
+  animation: fa-aura-idle 4s ease-in-out infinite;
+}
+.floating-assistant-orb--listening .floating-assistant-orb-aura {
+  background: radial-gradient(circle,
+    rgba(59, 130, 246, 0.65) 0%,
+    rgba(45, 212, 191, 0.45) 35%,
+    transparent 70%
+  );
+  animation: fa-aura-pulse 0.8s ease-in-out infinite;
+}
+.floating-assistant-orb--processing .floating-assistant-orb-aura {
+  background: radial-gradient(circle,
+    rgba(167, 139, 250, 0.65) 0%,
+    rgba(99, 102, 241, 0.4) 40%,
+    transparent 70%
+  );
+  animation: fa-aura-spin 2s linear infinite;
+}
+.floating-assistant-orb--speaking .floating-assistant-orb-aura {
+  background: radial-gradient(circle,
+    rgba(59, 130, 246, 0.6) 0%,
+    rgba(37, 99, 235, 0.35) 40%,
+    transparent 70%
+  );
+  animation: fa-aura-pulse 0.95s ease-in-out infinite;
+}
+
+/* Outer ring */
+.floating-assistant-orb-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.floating-assistant-orb--idle .floating-assistant-orb-ring {
+  border: 1px solid rgba(52, 211, 153, 0.6);
+  animation: fa-ring-idle 4s ease-in-out infinite;
+}
+.floating-assistant-orb--listening .floating-assistant-orb-ring {
+  border: 1.5px solid rgba(45, 212, 191, 0.8);
+  box-shadow: 0 0 12px rgba(45, 212, 191, 0.35);
+  animation: fa-pulse-fast 0.85s ease-in-out infinite;
+}
+.floating-assistant-orb--processing .floating-assistant-orb-ring {
+  border: 1.5px solid rgba(167, 139, 250, 0.75);
+  box-shadow: 0 0 12px rgba(167, 139, 250, 0.3);
+  animation: fa-ring-spin 1.8s linear infinite;
+}
+.floating-assistant-orb--speaking .floating-assistant-orb-ring {
+  border: 1.5px solid rgba(59, 130, 246, 0.8);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+  animation: fa-pulse-fast 0.95s ease-in-out infinite;
+}
+
+/* Orb body */
+.floating-assistant-orb-body {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: box-shadow 0.5s ease;
+}
+/* Specular highlight inside orb */
+.floating-assistant-orb-body::after {
+  content: '';
+  position: absolute;
+  top: 9%;
+  left: 18%;
+  width: 36%;
+  height: 26%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.42);
+  filter: blur(5px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.floating-assistant-orb--idle .floating-assistant-orb-body {
+  background: radial-gradient(circle at 35% 30%,
+    rgba(255,255,255,0.65) 0%,
+    rgba(52, 211, 153, 0.9) 30%,
+    rgba(20, 160, 100, 0.75) 70%,
+    rgba(10, 100, 70, 0.6) 100%
+  );
+  box-shadow: 0 0 28px rgba(52, 211, 153, 0.7),
+              0 6px 24px rgba(0,0,0,0.3),
+              inset 0 1.5px 3px rgba(255,255,255,0.7),
+              inset 0 -2px 6px rgba(0,0,0,0.25);
+}
+.floating-assistant-orb--listening .floating-assistant-orb-body {
+  background: radial-gradient(circle at 35% 30%,
+    rgba(255,255,255,0.65) 0%,
+    rgba(45, 212, 191, 0.88) 25%,
+    rgba(59, 130, 246, 0.75) 65%,
+    rgba(29, 78, 216, 0.6) 100%
+  );
+  box-shadow: 0 0 32px rgba(45, 212, 191, 0.75),
+              0 0 60px rgba(59, 130, 246, 0.28),
+              0 6px 24px rgba(0,0,0,0.3),
+              inset 0 1.5px 3px rgba(255,255,255,0.65),
+              inset 0 -2px 6px rgba(0,0,0,0.2);
+}
+.floating-assistant-orb--processing .floating-assistant-orb-body {
+  background: radial-gradient(circle at 35% 30%,
+    rgba(255,255,255,0.6) 0%,
+    rgba(167, 139, 250, 0.88) 28%,
+    rgba(99, 102, 241, 0.72) 65%,
+    rgba(55, 48, 163, 0.6) 100%
+  );
+  box-shadow: 0 0 32px rgba(167, 139, 250, 0.7),
+              0 0 60px rgba(99, 102, 241, 0.25),
+              0 6px 24px rgba(0,0,0,0.3),
+              inset 0 1.5px 3px rgba(255,255,255,0.6),
+              inset 0 -2px 6px rgba(0,0,0,0.25);
+}
+.floating-assistant-orb--speaking .floating-assistant-orb-body {
+  background: radial-gradient(circle at 35% 30%,
+    rgba(255,255,255,0.65) 0%,
+    rgba(59, 130, 246, 0.88) 28%,
+    rgba(37, 99, 235, 0.72) 65%,
+    rgba(29, 78, 216, 0.6) 100%
+  );
+  box-shadow: 0 0 32px rgba(59, 130, 246, 0.7),
+              0 6px 24px rgba(0,0,0,0.3),
+              inset 0 1.5px 3px rgba(255,255,255,0.65),
+              inset 0 -2px 6px rgba(0,0,0,0.2);
+}
+
+/* Audio bars inside orb */
+.floating-assistant-orb-bars {
+  position: absolute;
+  bottom: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 12px;
+  z-index: 3;
+}
+.floating-assistant-orb-bar {
+  width: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.72);
+  transition: height 0.07s ease;
+  box-shadow: 0 0 4px rgba(255,255,255,0.4);
+}
+
+/* ─── Orb Label ─────────────────────────────────────────── */
+.floating-assistant-orb-label {
+  font-size: 0.61rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(8, 10, 20, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 999px;
+  padding: 3px 9px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* ─── Call Button ───────────────────────────────────────── */
+.floating-assistant-call-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+.floating-assistant-call-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: scale(1.08);
+}
+
+/* ─── Animations ────────────────────────────────────────── */
+@keyframes fa-rise {
+  from { opacity: 0; transform: translateY(16px) scale(0.95); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes fa-pulse-slow {
+  0%, 100% { transform: scale(1);    opacity: 0.55; }
+  50%       { transform: scale(1.06); opacity: 0.72; }
+}
+@keyframes fa-pulse-med {
+  0%, 100% { transform: scale(1);    opacity: 0.72; }
+  50%       { transform: scale(1.12); opacity: 1; }
+}
+@keyframes fa-pulse-fast {
+  0%, 100% { transform: scale(1);    opacity: 0.82; }
+  50%       { transform: scale(1.16); opacity: 1; }
+}
+@keyframes fa-aura-idle {
+  0%, 100% { transform: scale(1);    opacity: 0.45; }
+  50%       { transform: scale(1.08); opacity: 0.65; }
+}
+@keyframes fa-aura-pulse {
+  0%, 100% { transform: scale(1);    opacity: 0.72; }
+  50%       { transform: scale(1.22); opacity: 1; }
+}
+@keyframes fa-aura-spin {
+  from { transform: rotate(0deg)   scale(1);    opacity: 0.75; }
+  50%  { transform: rotate(180deg) scale(1.12); opacity: 0.95; }
+  to   { transform: rotate(360deg) scale(1);    opacity: 0.75; }
+}
+@keyframes fa-ring-idle {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 0.85; }
+}
+@keyframes fa-ring-spin {
+  from { transform: rotate(0deg);   }
+  to   { transform: rotate(360deg); }
+}
+@keyframes fa-orb-breathe {
+  0%, 100% { transform: scale(1);    box-shadow: 0 0 24px rgba(59,130,246,0.55), 0 0 48px rgba(45,212,191,0.25); }
+  50%       { transform: scale(1.08); box-shadow: 0 0 36px rgba(59,130,246,0.75), 0 0 64px rgba(45,212,191,0.4); }
+}
+
+/* ══════════════════════════════════════════════════════════
+   XR MODE — PICO OS 6 / WebSpatial
+   ══════════════════════════════════════════════════════════
+   CROP FIX: The panel was clipping because:
+     1. `height: 95vh` + `bottom: 2.2rem` overflowed the viewport.
+     2. `width: 100vw` + `right: 2.2rem` pushed beyond right edge.
+   Fix: use top/left/right/bottom insets so the panel fills the
+   viewport naturally, clearing the orb bar at the bottom.
+   ══════════════════════════════════════════════════════════ */
+html.is-spatial .floating-assistant-panel {
+  position: fixed;
+
+  /* Anchor to all four viewport edges */
+  top: env(safe-area-inset-top, 0px);
+  left: env(safe-area-inset-left, 0px);
+  right: env(safe-area-inset-right, 0px);
+  /* Leave room for orb container: 92px orb + 2.2rem bottom + 10px gap ≈ 128px */
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 8rem);
+
+  /* Override the web defaults that caused the crop */
+  width: auto !important;
+  height: auto !important;
+  max-height: none;
+  max-width: none;
+
+  border-radius: 28px;
+  background: rgba(8, 10, 20, 0.88);
+  backdrop-filter: saturate(1.8) blur(56px);
+  -webkit-backdrop-filter: saturate(1.8) blur(56px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255,255,255,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.14);
+
+  /* XR rendering stability */
+  transform: translateZ(0);
+  will-change: transform;
+  transform-origin: center center;
+  overflow: hidden;
+  box-sizing: border-box;
+  pointer-events: auto;
+  z-index: 20;
+}
+
+html.is-spatial .floating-assistant-panel::before {
+  background: linear-gradient(
+    160deg,
+    rgba(255,255,255,0.08) 0%,
+    transparent 30%,
+    transparent 70%,
+    rgba(59,130,246,0.06) 100%
+  );
+}
+
+html.is-spatial .floating-assistant-header {
+  padding: 18px 22px;
+}
+html.is-spatial .floating-assistant-status-label {
+  font-size: 1.05rem;
+}
+html.is-spatial .floating-assistant-status-dot {
+  width: 11px;
+  height: 11px;
+}
+html.is-spatial .floating-assistant-tier {
+  font-size: 0.76rem;
+  padding: 3px 11px;
+}
+html.is-spatial .floating-assistant-actions { gap: 10px; }
+html.is-spatial .floating-assistant-context {
+  font-size: 0.76rem;
+  max-width: 160px;
+}
+html.is-spatial .floating-assistant-cart-pill,
+html.is-spatial .floating-assistant-budget-pill {
+  font-size: 0.76rem;
+  padding: 5px 13px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+}
+html.is-spatial .floating-assistant-voice-toggle,
+html.is-spatial .floating-assistant-clear-btn,
+html.is-spatial .floating-assistant-close-btn {
+  font-size: 1.05rem;
+  min-width: 38px;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+html.is-spatial .floating-assistant-feed {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 16px 14px;
+}
+
+html.is-spatial .floating-assistant-welcome {
+  padding: 24px 18px 14px;
+  gap: 20px;
+}
+html.is-spatial .floating-assistant-welcome-orb {
+  width: 60px;
+  height: 60px;
+}
+html.is-spatial .floating-assistant-welcome-text { font-size: 0.95rem; }
+html.is-spatial .floating-assistant-commands-grid { gap: 10px; }
+html.is-spatial .floating-assistant-command-card {
+  padding: 14px 16px;
+  border-radius: 18px;
+}
+html.is-spatial .floating-assistant-command-icon  { font-size: 1.3rem; }
+html.is-spatial .floating-assistant-command-label { font-size: 0.88rem; }
+html.is-spatial .floating-assistant-command-desc  { font-size: 0.74rem; }
+
+html.is-spatial .floating-assistant-bubble        { margin-bottom: 14px; }
+html.is-spatial .floating-assistant-bubble-content {
+  font-size: 1.05rem;
+  padding: 13px 18px;
+  border-radius: 26px;
+  max-width: 85%;
+}
+html.is-spatial .floating-assistant-bubble-badge {
+  font-size: 0.82rem;
+  padding: 5px 12px;
+  margin-top: 8px;
+}
+html.is-spatial .floating-assistant-loading-bubble {
+  padding: 14px 20px;
+  font-size: 1.05rem;
+}
+
+html.is-spatial .floating-assistant-quick-prompts {
+  gap: 10px;
+  padding: 12px 16px;
+}
+html.is-spatial .floating-assistant-quick-prompt {
+  font-size: 0.88rem;
+  padding: 9px 18px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+html.is-spatial .floating-assistant-input-row {
+  gap: 10px;
+  padding: 14px 16px 18px;
+}
+html.is-spatial .floating-assistant-mic-btn  { width: 54px; height: 54px; }
+html.is-spatial .floating-assistant-input {
+  padding: 13px 20px;
+  font-size: 1.05rem;
+  min-height: 54px;
+}
+html.is-spatial .floating-assistant-send-btn { width: 54px; height: 54px; }
+
+html.is-spatial .floating-assistant-orb-container {
+  bottom: 2.2rem;
+  right: 2.2rem;
+  gap: 10px;
+}
+html.is-spatial .floating-assistant-orb   { width: 92px; height: 92px; }
+html.is-spatial .floating-assistant-orb-label {
+  font-size: 0.78rem;
+  padding: 5px 13px;
+}
+html.is-spatial .floating-assistant-call-btn { width: 62px; height: 62px; font-size: 1.45rem; }
+
+/* ══════════════════════════════════════════════════════════
+   XR ROOT LAYOUT — fills the entire WebSpatial canvas
+   position:fixed is meaningless inside an XR canvas;
+   the parent <div> IS the window boundary, so we use
+   a flex column that fills 100% of that parent.
+   ══════════════════════════════════════════════════════════ */
+.fa-xr-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* prevent any element from escaping the XR canvas */
+  position: relative;
+}
+
+/* Panel fills all remaining space above the orb row */
+.fa-xr-panel {
+  /* Override the position:fixed from the base class */
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: auto !important;
+  flex: 1 1 auto;
+  min-height: 0;
+  /* Keep the rest of the glassmorphism styles but lose the fixed positioning */
+  border-radius: 0 !important;
+  /* Re-apply good radius only at top since orb row is below */
+  animation: none !important;
+}
+
+/* Orb row sits at the bottom of the XR canvas, inline */
+.fa-xr-orb-row {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px 16px 14px;
+  background: rgba(0, 0, 0, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* In the orb row, the orb is inline (not fixed) so it fills naturally */
+.fa-xr-orb-row .floating-assistant-orb {
+  position: relative !important;
+  width: 72px;
+  height: 72px;
+  /* Remove any fixed/absolute descendants from conflicting */
+  flex-shrink: 0;
+}
+
+.fa-xr-orb-row .floating-assistant-call-btn {
+  position: relative !important;
+  width: 52px;
+  height: 52px;
+  font-size: 1.2rem;
+}
+
+/* ── Plasma / fluid orb SVG ───────────────────────────── */
+.floating-assistant-orb {
+  /* ensure SVG layers stack properly */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Full-cover plasma SVG */
+.fa-orb-plasma {
+  position: absolute;
+  inset: -6px; /* slightly larger than the orb button for the aura ring */
+  width: calc(100% + 12px);
+  height: calc(100% + 12px);
+  pointer-events: none;
+  border-radius: 50%;
+  overflow: visible;
+}
+
+/* State-specific plasma animation speeds on the orb */
+.floating-assistant-orb--idle       .fa-orb-plasma { animation: fa-plasma-breathe 5s ease-in-out infinite; }
+.floating-assistant-orb--listening  .fa-orb-plasma { animation: fa-plasma-breathe 1.2s ease-in-out infinite; }
+.floating-assistant-orb--processing .fa-orb-plasma { animation: fa-plasma-spin 3s linear infinite; }
+.floating-assistant-orb--speaking   .fa-orb-plasma { animation: fa-plasma-breathe 1.8s ease-in-out infinite; }
+
+@keyframes fa-plasma-breathe {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.06); }
+}
+@keyframes fa-plasma-spin {
+  from { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.05); }
+  to   { transform: rotate(360deg) scale(1); }
+}
+
+/* Center icon sits above the plasma SVG */
+.fa-orb-icon {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 4px rgba(255,255,255,0.4));
+}
+.fa-orb-icon svg {
+  display: block;
+}
+
+/* Processing sparkle gets a spin */
+.floating-assistant-orb--processing .fa-orb-icon svg {
+  animation: fa-sparkle-spin 1.6s linear infinite;
+}
+@keyframes fa-sparkle-spin {
+  from { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.2); }
+  to   { transform: rotate(360deg) scale(1); }
+}
+
+/* Orb aura override — larger blur spread with the new plasma */
+.floating-assistant-orb-aura {
+  inset: -22px;
+  filter: blur(10px);
+}
+
+/* Remove old orb-body / orb-ring / orb-bars (we replaced them with plasma SVG) */
+.floating-assistant-orb-ring  { display: none; }
+.floating-assistant-orb-body  { display: none; }
+.floating-assistant-orb-bars  { display: none; }

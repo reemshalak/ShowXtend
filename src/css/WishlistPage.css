@@ -1,0 +1,417 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   WishlistPage.css — Apple Vision Pro glossy glass wishlist
+   Matches CartPage.css exactly for consistency
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Page wrapper (standalone XR window) ────────────────────────────────── */
+.wishlist-page-root {
+  width: 100%;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  background: transparent;
+}
+
+/* Web fallback: dark backdrop when not in XR */
+html:not(.is-spatial) .wishlist-page-root {
+  background: rgba(20, 20, 30, 0.92);
+}
+
+/* XR / Pico OS 6 — anchor root to the XR window frame */
+html.is-spatial .wishlist-page-root {
+  position: fixed;
+  inset: 0;
+  height: auto;
+  background: transparent;
+  overflow: hidden;
+  --xr-background-material: transparent;
+}
+
+/* ── Modal overlay wrapper (drawer mode in main app) ────────────────────── */
+.wishlist-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: wishlist-fade-in 0.2s ease;
+}
+
+@keyframes wishlist-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Main panel card — matching cart's glossy glass ──────────────────────── */
+.wishlist-panel {
+  width: 100%;
+  max-width: 380px;
+  max-height: 92svh;
+  display: flex;
+  flex-direction: column;
+
+  /* 🔥 Matching cart's glossy glass */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(52px) saturate(1.8) brightness(1.15);
+  -webkit-backdrop-filter: blur(52px) saturate(1.8) brightness(1.15);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 40px 100px rgba(0, 0, 0, 0.4),
+    0 1px 3px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  color: #fff;
+}
+
+/* Glossy shine overlay */
+.wishlist-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+  border-radius: 32px;
+}
+
+/* XR spatial mode — matching cart */
+html.is-spatial .wishlist-panel {
+  --xr-background-material: translucent;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(60px) saturate(2) brightness(1.2);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 20px 60px rgba(0, 0, 0, 0.2);
+  max-height: 80vh;
+  max-width: 400px;
+  position: relative;
+  inset: auto;
+}
+
+/* Standalone wishlist-page-root window */
+html:not(.is-spatial) .wishlist-panel {
+  max-width: 400px;
+  max-height: 88svh;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.wishlist-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.3rem 1.5rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.wishlist-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.wishlist-count {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 0.1rem;
+  display: block;
+}
+
+.wishlist-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  backdrop-filter: blur(4px);
+}
+.wishlist-close-btn:hover { 
+  background: rgba(255, 255, 255, 0.2); 
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* ── Budget section ──────────────────────────────────────────────────────── */
+.budget-section {
+  padding: 0.75rem 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.75rem;
+}
+
+.budget-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.budget-label { 
+  font-size: 0.8rem; 
+  color: rgba(255, 255, 255, 0.55); 
+}
+
+.budget-set-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.78rem;
+  padding: 0.25rem 0.65rem;
+  cursor: pointer;
+  transition: all 0.14s;
+  backdrop-filter: blur(4px);
+}
+.budget-set-btn:hover { 
+  background: rgba(255, 255, 255, 0.2); 
+  transform: scale(1.02);
+}
+
+.budget-edit-row { display: flex; gap: 0.4rem; align-items: center; }
+
+.budget-input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.55rem;
+  width: 100px;
+  outline: none;
+}
+.budget-input:focus { 
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.budget-save-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  transition: all 0.14s;
+}
+.budget-save-btn:hover { 
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.02);
+}
+
+.budget-bar-track {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.budget-bar-fill {
+  height: 100%;
+  background: #34d399;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 4px rgba(52, 211, 153, 0.3);
+}
+.budget-bar-fill--over { background: #f87171; }
+
+.budget-status-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+}
+.budget-total       { color: rgba(255, 255, 255, 0.65); }
+.budget-total--over { color: #f87171; }
+.budget-remaining   { color: rgba(255, 255, 255, 0.45); }
+
+/* ── Items body ──────────────────────────────────────────────────────────── */
+.wishlist-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+/* ── Single item row — matching cart items ───────────────────────────────── */
+.wishlist-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.2s;
+  backdrop-filter: blur(8px);
+}
+
+.wishlist-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.01);
+}
+
+html.is-spatial .wishlist-item {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.wishlist-item-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.wishlist-item-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.wishlist-item-info { flex: 1; min-width: 0; }
+
+.wishlist-item-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #fff;
+}
+
+.wishlist-item-sub {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 1px;
+}
+
+.wishlist-item-price {
+  font-size: 0.9rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.wishlist-remove-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.2rem 0.25rem;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wishlist-remove-btn:hover { 
+  color: #ff3b30;
+  background: rgba(255, 59, 48, 0.15);
+  transform: scale(1.05);
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+.wishlist-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 3rem 1.5rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.wishlist-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 1.5rem 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: 1rem;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.wishlist-total-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.wishlist-total-label {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.wishlist-total-price {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.wishlist-share-btn {
+  padding: 0.65rem 1.2rem;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+}
+.wishlist-share-btn:hover { 
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+}

@@ -1,0 +1,228 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   CENTER PANEL — visionOS spatial glass  (cp-*)
+   Append to the END of index.css — overrides old flat styles.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+
+/* ── XR single-panel root (each standalone scene window) ────────────────── */
+/* Transparent, fills the scene window. Row layout: nav LEFT, panel RIGHT   */
+.xr-single-center-panel-root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  min-height: 100svh;
+  background: transparent;
+  padding: 1rem;
+  gap: 1.25rem;
+}
+
+/* ── Back button hover (overrides inline, matches icon-btn glow) ─────────── */
+.cp-back-btn:hover {
+  background: rgba(255,255,255,0.16) !important;
+  border-color: rgba(255,255,255,0.30) !important;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.20) !important;
+}
+.cp-back-btn:active {
+  background: rgba(255,255,255,0.10) !important;
+  transform: scale(0.92) !important;
+}
+
+/* ── Back chevron inside nav pill ──────────────────────────────────────────── */
+.sidenav-btn--back {
+  /* Inherits sidenav-btn sizing/spacing — just add a warm tint on hover */
+  color: rgba(255,255,255,0.65) !important;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.2s cubic-bezier(0.16,1,0.3,1) !important;
+}
+.sidenav-btn--back:hover {
+  background: rgba(255,255,255,0.13) !important;
+  color: #fff !important;
+  transform: scale(1.08) !important;
+}
+.sidenav-btn--back:active {
+  background: rgba(255,255,255,0.08) !important;
+  transform: scale(0.92) !important;
+}
+/* XR: larger target */
+html.is-spatial .sidenav-btn--back {
+  min-height: 46px !important;
+  min-width: 46px !important;
+}
+
+
+/* ── Panel specular sheen ─────────────────────────────────────────────────── */
+.center-panel {
+  position: relative;
+  isolation: isolate;
+}
+.center-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.10) 0%,
+    rgba(255,255,255,0.03) 40%,
+    transparent 65%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+.center-panel > * { position: relative; z-index: 1; }
+
+/* ── XR: let OS material render, keep only tint layer ─────────────────────── */
+html.is-spatial .center-panel {
+  --xr-background-material: translucent;
+  background: rgba(14,14,20,0.45) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-color: rgba(255,255,255,0.16) !important;
+
+}
+html.is-spatial .top-floating-bar {
+  --xr-background-material: translucent;
+  background: rgba(14,14,20,0.35) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── Icon buttons hover glow ──────────────────────────────────────────────── */
+.cp-icon-btn:hover {
+  background: rgba(255,255,255,0.16) !important;
+  border-color: rgba(255,255,255,0.30) !important;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.20) !important;
+}
+.cp-icon-btn:active {
+  background: rgba(255,255,255,0.10) !important;
+}
+
+/* ── Add to cart hover ────────────────────────────────────────────────────── */
+.cp-add-btn:hover:not(:disabled) {
+  background: rgba(255,255,255,0.22) !important;
+  border-color: rgba(255,255,255,0.35) !important;
+  box-shadow: 0 4px 22px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.22) !important;
+}
+.cp-add-btn:active:not(:disabled) {
+  background: rgba(255,255,255,0.12) !important;
+}
+
+/* ── Place-it hover ───────────────────────────────────────────────────────── */
+.cp-place-btn:hover:not(:disabled) {
+  background: rgba(99,160,255,0.22) !important;
+  border-color: rgba(99,160,255,0.50) !important;
+  box-shadow: 0 0 18px rgba(99,160,255,0.20) !important;
+}
+
+/* ── Product image drop shadow depth ─────────────────────────────────────── */
+.product-img {
+  filter: drop-shadow(0 12px 28px rgba(0,0,0,0.4));
+}
+
+/* ── Qty stepper buttons hover ────────────────────────────────────────────── */
+.qty .cp-spring-btn:hover {
+  background: rgba(255,255,255,0.18) !important;
+}
+
+/* ── Tab bar hover ────────────────────────────────────────────────────────── */
+.top-floating-bar .cp-spring-btn:hover {
+  background: rgba(255,255,255,0.12) !important;
+  color: #fff !important;
+}
+
+/* ── Swatch hover ─────────────────────────────────────────────────────────── */
+.cp-spring-btn[title]:hover:not(.cp-swatch-active) {
+  transform: scale(1.10);
+  border-color: rgba(255,255,255,0.4) !important;
+}
+
+/* ── Responsive: narrow windows ───────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .xr-single-center-panel-root { flex-direction: column !important; align-items: center !important; }
+  .center-panel { width: 100% !important; min-height: auto !important; }
+  .center-body  { flex-direction: column-reverse !important; }
+  .info-side    { width: 100% !important; }
+  .visual-side  { width: 100% !important; align-items: center !important; }
+  .top-floating-bar { top: -48px !important; font-size: 0.7rem; }
+}
+
+
+        /* Spring button base */
+        .cp-spring-btn {
+          border: none;
+          cursor: pointer;
+          transition:
+            transform 0.25s cubic-bezier(0.16,1,0.3,1),
+            background 0.18s ease,
+            box-shadow 0.18s ease,
+            border-color 0.18s ease,
+            opacity 0.18s ease;
+          -webkit-tap-highlight-color: transparent;
+          user-select: none;
+        }
+        .cp-spring-btn:disabled { cursor: default; opacity: 0.38; }
+
+        /* Levitating product image */
+        @keyframes cp-levitate {
+          0%,100% { transform: translateY(0px) rotate(-1deg); }
+          50%      { transform: translateY(-12px) rotate(1deg); }
+        }
+        .cp-img-levitate {
+          animation: cp-levitate 5s ease-in-out infinite;
+        }
+        /* Pause levitate on hover (parallax takes over) */
+        .cp-img-wrap:hover .cp-img-levitate {
+          animation-play-state: paused;
+        }
+
+        /* Add-to-cart flash */
+        @keyframes cp-add-flash {
+          0%   { box-shadow: 0 0 0 0 rgba(99,220,130,0.65); }
+          50%  { box-shadow: 0 0 0 18px rgba(99,220,130,0); }
+          100% { box-shadow: 0 0 0 0 rgba(99,220,130,0); }
+        }
+        .cp-add-flash { animation: cp-add-flash 0.55s ease forwards; }
+
+        /* Place-it ripple */
+        @keyframes cp-ripple {
+          0%   { box-shadow: 0 0 0 0 rgba(99,160,255,0.55); }
+          100% { box-shadow: 0 0 0 22px rgba(99,160,255,0); }
+        }
+        .cp-place-ripple { animation: cp-ripple 0.65s ease forwards; }
+
+        /* Heart animation */
+        @keyframes cp-heart-pop {
+          0%   { transform: scale(1); }
+          40%  { transform: scale(1.45); }
+          70%  { transform: scale(0.88); }
+          100% { transform: scale(1); }
+        }
+        .cp-heart-pop { animation: cp-heart-pop 0.38s cubic-bezier(0.16,1,0.3,1); }
+
+        /* Tab active indicator */
+        .cp-tab-active::after {
+          content: '';
+          position: absolute;
+          bottom: -2px; left: 50%; transform: translateX(-50%);
+          width: 20px; height: 2px;
+          border-radius: 2px;
+          background: rgba(255,255,255,0.85);
+        }
+
+        /* Swatch ring */
+        .cp-swatch-active {
+          box-shadow: 0 0 0 2px rgba(255,255,255,0.2), 0 0 0 4px white !important;
+          transform: scale(1.18) !important;
+        }
+
+        /* Footer thumb hover */
+        .cp-thumb:hover { background: rgba(255,255,255,0.2) !important; transform: scale(1.05); }
+
+        /* XR: larger tap targets for controller */
+        html.is-spatial .cp-spring-btn { min-height: 42px; min-width: 42px; }
+        html.is-spatial .cp-icon-btn   { width: 50px !important; height: 50px !important; font-size: 1.2rem !important; }
+        html.is-spatial .cp-add-btn    { padding: 0.75rem 2rem !important; font-size: 1rem !important; }
+        html.is-spatial .cp-place-btn  { padding: 0.75rem 1.6rem !important; font-size: 1rem !important; }

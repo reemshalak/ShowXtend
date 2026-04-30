@@ -1,0 +1,221 @@
+.xrm-toolbar-container {
+  position: absolute;
+  left: 75%;
+  top: 50%;
+  transform: translate(-10%, -50%);
+  width: 0;
+  height: 0;
+  z-index: 900;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* Main frosted glass orb — light, layered, visionOS feel */
+.xrm-toolbar-background {
+  position: absolute;
+  left: -88px;
+  top: -88px;
+  width: 176px;
+  height: 176px;
+  border-radius: 50%;
+  /* Layered glass: inner specular highlight + frosted mid + outer rim */
+  background:
+    radial-gradient(
+      ellipse at 35% 28%,
+      rgba(255,255,255,0.28) 0%,
+      rgba(255,255,255,0.10) 45%,
+      rgba(255,255,255,0.04) 100%
+    );
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.35);
+  /* Soft outer glow + inner specular rim */
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.55) inset,      /* top specular rim */
+    0 -1px 0 rgba(255,255,255,0.12) inset,      /* bottom inner rim */
+    0 20px 60px rgba(0,0,0,0.22),               /* soft drop shadow */
+    0 4px 16px rgba(0,0,0,0.12);
+  pointer-events: auto;
+}
+
+/* Inner specular sheen — the bright arc on the upper-left like visionOS */
+.xrm-toolbar-background::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  width: 70%;
+  height: 42%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at 40% 35%,
+    rgba(255,255,255,0.30) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* Label pill — light frosted glass, not dark */
+.xrm-toolbar-label {
+  position: absolute;
+  left: -72px;
+  top: 94px;
+  width: 144px;
+  text-align: center;
+  background: rgba(255,255,255,0.16);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 24px;
+  padding: 5px 12px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.92);
+  white-space: nowrap;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset, 0 4px 12px rgba(0,0,0,0.15);
+  letter-spacing: 0.01em;
+}
+
+.xrm-toolbar-label-color {
+  font-size: 0.9rem;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+}
+
+.xrm-toolbar-label-percent {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.6rem;
+  font-weight: 500;
+}
+
+/* Close button — small, top-left of orb */
+.xrm-toolbar-close {
+  position: absolute;
+  left: -84px;
+  top: -84px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.40);
+  color: rgba(255,255,255,0.85);
+  font-size: 0.6rem;
+  cursor: pointer;
+  z-index: 20;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.45) inset, 0 3px 8px rgba(0,0,0,0.18);
+  transition: background 0.16s ease, transform 0.18s cubic-bezier(0.16,1,0.3,1);
+}
+.xrm-toolbar-close:hover {
+  background: rgba(255,255,255,0.30);
+  transform: scale(1.12);
+}
+.xrm-toolbar-close:active {
+  background: rgba(255,255,255,0.12);
+  transform: scale(0.92);
+}
+
+.xrm-toolbar-color-popout {
+  position: absolute;
+  left: -100px;
+  bottom: 100px;
+  z-index: 400;
+  pointer-events: auto;
+}
+
+/* ── Orbital buttons — visionOS frosted glass capsules ────────────────────── */
+.xrm-toolbar-btn {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 15;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  /* Glass base */
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.42);
+  box-shadow:
+    0 1.5px 0 rgba(255,255,255,0.55) inset,    /* top specular */
+    0 -1px 0 rgba(0,0,0,0.06) inset,            /* bottom inner shadow */
+    0 4px 14px rgba(0,0,0,0.18),                /* lift shadow */
+    0 1px 3px rgba(0,0,0,0.10);
+  color: rgba(255,255,255,0.92);
+  transition:
+    transform 0.2s cubic-bezier(0.16,1,0.3,1),
+    background 0.16s ease,
+    box-shadow 0.16s ease,
+    border-color 0.16s ease;
+  /* Offset so the button center sits on the ring radius */
+  margin: -19px 0 0 -19px;
+}
+
+/* Hover — brighter glass, slight scale */
+.xrm-toolbar-btn:hover {
+  background: rgba(255,255,255,0.30);
+  border-color: rgba(255,255,255,0.65);
+  box-shadow:
+    0 1.5px 0 rgba(255,255,255,0.70) inset,
+    0 -1px 0 rgba(0,0,0,0.06) inset,
+    0 8px 24px rgba(0,0,0,0.22),
+    0 2px 6px rgba(0,0,0,0.12);
+  transform: scale(1.16) !important;
+}
+
+/* Press */
+.xrm-toolbar-btn:active {
+  background: rgba(255,255,255,0.10);
+  transform: scale(0.90) !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.25) inset,
+    0 2px 8px rgba(0,0,0,0.15);
+  transition-duration: 0.08s;
+}
+
+/* Danger — red tinted glass */
+.xrm-toolbar-btn-danger {
+  background: rgba(239,68,68,0.22);
+  border-color: rgba(239,100,100,0.50);
+  color: #fecaca;
+  box-shadow:
+    0 1.5px 0 rgba(255,200,200,0.35) inset,
+    0 4px 14px rgba(239,68,68,0.18);
+}
+.xrm-toolbar-btn-danger:hover {
+  background: rgba(239,68,68,0.38);
+  border-color: rgba(239,100,100,0.75);
+  box-shadow:
+    0 1.5px 0 rgba(255,200,200,0.45) inset,
+    0 8px 24px rgba(239,68,68,0.28);
+}
+
+/* Active/selected (e.g. color picker open) — indigo tinted */
+.xrm-toolbar-btn-active {
+  background: rgba(99,102,241,0.35);
+  border-color: rgba(139,140,255,0.65);
+  color: #fff;
+  box-shadow:
+    0 1.5px 0 rgba(200,200,255,0.45) inset,
+    0 4px 14px rgba(99,102,241,0.28);
+}
+.xrm-toolbar-btn-active:hover {
+  background: rgba(99,102,241,0.50);
+  box-shadow:
+    0 1.5px 0 rgba(200,200,255,0.55) inset,
+    0 8px 24px rgba(99,102,241,0.38);
+}
