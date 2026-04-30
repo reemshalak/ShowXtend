@@ -42,8 +42,7 @@ import PlaceItView from './PlaceItView';
 import CollabSessionPage from './CollabSessionPage';
 import FloatingCallOverlay from './FloatingCallOverlay';
 import FloatingAssistant from './FloatingAssistant';
-//@ts-ignore
-import WishlistPanel from './Wishlistpanel';
+import WishlistPanel from './WishlistPanel';
 import CartPanel from './CartPanel';
 import { SharedSceneManager } from './SharedSceneManager';
 import { getSession, joinSession } from './collaboration';
