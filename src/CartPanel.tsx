@@ -43,9 +43,15 @@ export default function CartPanel({ items, onUpdateQty, onRemove, onClose }: Car
       <div className="cart-items">
         {items.map(({ product, qty }) => (
           <div key={product.id} className="cart-item">
-            <div className="cart-item-thumb">
-              <span style={{ fontSize: '2rem' }}>{product.emoji}</span>
-            </div>
+             <div className="wishlist-item-thumb">
+                {(product as any).imageUrl
+                  ? <img
+                      src={(product as any).imageUrl}
+                      alt={product.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'multiply' }}
+                    />
+                  : product.emoji}
+              </div>
             <div className="cart-item-body">
               <div className="cart-item-name">{product.name}</div>
               <div className="cart-item-type">{product.fullType}</div>

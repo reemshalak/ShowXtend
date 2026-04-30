@@ -630,7 +630,7 @@ export default function CenterPanel({
                   }}
                   onClick={() => setQty(q => Math.max(1, q - 1))}
                 >−</SpringBtn>
-                {/* <span style={{ minWidth: 22, textAlign: 'center', fontSize: '0.9rem', fontWeight: 600 }}>{qty}</span> */}
+                <span style={{ minWidth: 22, textAlign: 'center', fontSize: '0.9rem', fontWeight: 600 }}>{qty}</span>
                 <SpringBtn
                   style={{
                     width: 24, height: 24, borderRadius: '50%',

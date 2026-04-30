@@ -178,6 +178,20 @@ const openCartWindow = () => {
       '/cart',
     { width: 340, height: 480 }, { x: 0, y: -420, z: 0 }
     );
+    // Push current cart state after the window has had time to load and attach its listener
+    setTimeout(() => {
+      const ch = new BroadcastChannel(CART_CHANNEL);
+      ch.postMessage({
+        type:          'state',
+        items:         cartItemsRef.current,
+        wishlist:      wishlistItemsRef.current,
+        budget:        budgetRef.current,
+        selectedId:    selectedRef.current.id,
+        selectedName:  selectedRef.current.name,
+        selectedPrice: selectedRef.current.priceNum,
+      });
+      ch.close();
+    }, 800);
   } else {
     setShowCart(true);
   }
@@ -186,6 +200,12 @@ const openCartWindow = () => {
 const openWishlistWindow = () => {
   if (isXRMode) {
     openOnDemand('wishlist-window', '/wishlist', { width: 360, height: 520 }, { x: CENTER_W/2 + GAP + RIGHT_W/2 + 200, y: -100, z: 0 });
+    // Push current wishlist state after the window has had time to load and attach its listener
+    setTimeout(() => {
+      const ch = new BroadcastChannel(WISHLIST_CHANNEL);
+      ch.postMessage({ type: 'state', items: wishlistItemsRef.current });
+      ch.close();
+    }, 800);
   } else {
     setShowWishlist(true);
   }
@@ -242,15 +262,16 @@ case 'place_it':
   };
 
 
-// WISHLIST SYNC 
-
+// WISHLIST SYNC — keep a persistent channel so XR windows receive updates live
   useEffect(() => {
   const ch = new BroadcastChannel(WISHLIST_CHANNEL);
   ch.postMessage({ 
     type: 'state', 
     items: wishlistItems 
   });
-  ch.close();
+  // Don't close — the channel stays open so the XR wishlist window can receive live updates.
+  // It will be closed on unmount via the cleanup below.
+  return () => ch.close();
 }, [wishlistItems]);
 
 // CALL_CHANNEL SYNC FOR FLOATING ASSISTANT STANDALONE
@@ -523,23 +544,29 @@ useEffect(() => {
   //   return () => ch.close();
   // }, []);
 
-  // ── [FIX E] PRODUCT CHANNEL — assistant select_product + existing XR usage ────
 // ── [FIX E] PRODUCT CHANNEL — assistant select_product + existing XR usage ────
 useEffect(() => {
   const ch = new BroadcastChannel(PRODUCT_CHANNEL);
   ch.onmessage = async (e) => {
     console.log('[CenterPanel] PRODUCT_CHANNEL received:', e.data);
+    
     if (e.data?.type === 'select' && e.data.productId != null) {
+      console.log('[CenterPanel] Looking for product ID:', e.data.productId);
+      console.log('[CenterPanel] Product name from broadcast:', e.data.productName);
+      
       // First try to find in local PRODUCTS
       let p = PRODUCTS.find(p => p.id === e.data.productId);
+      console.log('[CenterPanel] Found in PRODUCTS?', p?.name || 'NO');
       
       // If not found, try to load from IKEA API
       if (!p) {
+        console.log('[CenterPanel] Attempting to load from IKEA API for ID:', e.data.productId);
         try {
           const { getProductDetails } = await import('./ikeaApi');
           const detail = await getProductDetails(String(e.data.productId));
+          console.log('[CenterPanel] API response detail:', detail?.productName || 'NOT FOUND');
+          
           if (detail) {
-            // Create a Product-like object from detail
             p = {
               id: e.data.productId,
               name: detail.productName,
@@ -554,29 +581,23 @@ useEffect(() => {
               imageUrl: detail.gallery?.[0],
               category: 'Furniture',
             } as Product;
+            console.log('[CenterPanel] Created product from API:', p.name);
           }
         } catch (err) {
-          console.warn('[CenterPanel] Failed to load product details:', err);
+          console.error('[CenterPanel] API load failed:', err);
         }
       }
       
       if (p) { 
-        console.log('[CenterPanel] Setting selected product:', p.name);
+        console.log('[CenterPanel] ✅ Setting selected product to:', p.name);
         setSelected(p);
-        // Don't change mode - just update product silently
       } else {
-        console.warn('[CenterPanel] Product not found for ID:', e.data.productId);
+        console.warn('[CenterPanel] ❌ Product not found for ID:', e.data.productId);
       }
     }
   };
   return () => ch.close();
 }, []);
-
-
-// In your main app, wherever you trigger the assistant window:
-const openAssistantWindow = () => {
- 
-};
 
 // ── Auto-open FloatingAssistant window on XR start ─────────────────────────────
 useEffect(() => {
@@ -633,8 +654,8 @@ useEffect(() => {
 
 const placeProductInXR = async (product: Product) => {
 
-console.log('[CenterPanel] Product imageUrl:', product.imageUrl);
-console.log('[CenterPanel] Full product:', product);
+  console.log('[CenterPanel] Product imageUrl:', product.imageUrl);
+  console.log('[CenterPanel] Full product:', product);
 
   const idx = sceneStore.getObjects().length;
   const obj = makeObject('product', {
@@ -660,41 +681,55 @@ console.log('[CenterPanel] Full product:', product);
     initScene(winName, (cfg) => ({
       ...cfg,
       defaultSize: { width: 260, height: 260 },
-    minSize:      { width: 260, height: 260 },
-    resizable:    true,
-     
+      minSize: { width: 260, height: 260 },
+      resizable: true,
     }));
   }
 
   broadcastObject(obj.id, { type: 'sync', payload: obj });
   getSession()?.send({ type: 'control_action', action: 'scene_object_placed', data: { object: obj } } as any);
 
-  // 🔥 FIX: Wait for the window to load before sending messages
-  // Give it 1 second to set up its event listeners
+  // Wait for window to load
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  const sendReliable = (msg: any, attempts = 15) => {
-    let i = 0;
-    const send = () => { 
-      broadcastObject(obj.id, msg); 
-      if (++i < attempts) setTimeout(send, 300); 
-    };
-    send();
-  };
-
-  sendReliable({ type: 'model_loading' });
+  // 🔥 INDEFINITE SENDER - keeps sending every 2 seconds
+  let isGenerating = true;
+  let isReady = false;
+  
+  const sendGeneratingLoop = setInterval(() => {
+    if (isGenerating && !isReady) {
+      broadcastObject(obj.id, { type: 'model_loading' });
+      console.log('[CenterPanel] Sending model_loading...');
+    }
+  }, 2000);
 
   try {
+    const imageUrl = product.imageUrl?.trim() ?? '';
+    console.log('[CenterPanel] 🖼️ Image URL to Tripo3D:', imageUrl);
+    
+    if (!imageUrl) {
+      console.warn('[Tripo3D] ❌ No imageUrl for product:', product.name);
+      clearInterval(sendGeneratingLoop);
+      broadcastObject(obj.id, { type: 'model_error' });
+      return;
+    }
+    
+    console.log('[CenterPanel] Starting Tripo3D generation for:', product.name);
     const url = await generateTripo3DModel(
-      product.imageUrl ?? '',
+      imageUrl,
       () => {},
       { xrMode: true }
     );
-    sendReliable({ type: 'model_ready', payload: { url } }, 30);
+    
+    console.log('[CenterPanel] ✅ Tripo3D generation complete, URL:', url);
+    isReady = true;
+    clearInterval(sendGeneratingLoop);
+    broadcastObject(obj.id, { type: 'model_ready', payload: { url } });
 
   } catch (err) {
     console.error('[XR] Tripo3D failed', err);
-    sendReliable({ type: 'model_error' }, 20);
+    clearInterval(sendGeneratingLoop);
+    broadcastObject(obj.id, { type: 'model_error' });
   }
 };
 

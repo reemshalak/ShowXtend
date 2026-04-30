@@ -33,6 +33,8 @@ type CatalogProduct = Product & {
 export interface BrowsePageProps {
   onSelectProduct: (product: Product) => void;
   onWishlist: (product: Product) => void;
+  onAddToCart?: (product: Product) => void;  // 👈 ADD THIS
+
   cartCount: number;
   wishlistCount?: number;
   hasControl?: boolean;
@@ -45,6 +47,8 @@ export interface BrowsePageProps {
   onOpenCollab?: () => void;
   onOpenLighting?: () => void;
   onOpenLayouts?: () => void;
+
+  
 }
 
 

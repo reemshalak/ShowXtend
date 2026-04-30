@@ -147,3 +147,12 @@ console.log('[Tripo3D] imageToken:', imageToken);
 
   throw new Error('Tripo3D: timeout waiting for model');
 }
+
+export function getOriginalImageUrl(url: string): string {
+  // Check if it's a proxied URL
+  const proxyMatch = url.match(/\/img-proxy\?url=(.+)$/);
+  if (proxyMatch) {
+    return decodeURIComponent(proxyMatch[1]);
+  }
+  return url;
+}
