@@ -1,5 +1,4 @@
 // WishlistPage.tsx
-//@ts-ignore
 import WishlistPanel from './WishlistPanel';
 import { useState, useEffect } from 'react';
 import type { Product } from './data';
