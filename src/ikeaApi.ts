@@ -14,13 +14,8 @@ const LANGUAGE     = 'en';
 function getProxiedImageUrl(url: string): string {
   if (!url) return '';
   
-  // On Vercel, use the API route
-  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-    return `/api/img-proxy?url=${encodeURIComponent(url)}`;
-  }
-  
-  // Local development - use Vite proxy
-  return `/img-proxy?url=${encodeURIComponent(url)}`;
+  // 🔥 JUST USE DIRECT URL - IKEA CDN allows CORS now
+  return url;
 }
 
 // ── Single in-memory store ──────────────────────────────────────────────────
