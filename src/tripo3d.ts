@@ -153,7 +153,7 @@ console.log('[Tripo3D] imageToken:', imageToken);
 
 export function getOriginalImageUrl(url: string): string {
   // Check if it's a proxied URL
-  const proxyMatch = url.match(/\/img-proxy\?url=(.+)$/);
+const proxyMatch = url.match(/\/api\/img-proxy\?url=(.+)$/);
   if (proxyMatch) {
     return decodeURIComponent(proxyMatch[1]);
   }
