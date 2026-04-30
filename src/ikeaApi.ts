@@ -14,8 +14,13 @@ const LANGUAGE     = 'en';
 function getProxiedImageUrl(url: string): string {
   if (!url) return '';
   
-  // DIRECT IKEA URL - try this first
-  return url;
+  // On Vercel, use the API route
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    return `/api/img-proxy?url=${encodeURIComponent(url)}`;
+  }
+  
+  // Local development - use Vite proxy
+  return `/img-proxy?url=${encodeURIComponent(url)}`;
 }
 
 // ── Single in-memory store ──────────────────────────────────────────────────
