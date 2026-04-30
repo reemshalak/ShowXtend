@@ -13,9 +13,9 @@ const LANGUAGE     = 'en';
 // ── Image proxy ──────────────────────────────────────────────────────────────
 function getProxiedImageUrl(url: string): string {
   if (!url) return '';
-  
-  // 🔥 JUST USE DIRECT URL - IKEA CDN allows CORS now
-  return url;
+  // return `/img-proxy?url=${encodeURIComponent(url)}`;
+
+  return `/api/img-proxy?url=${encodeURIComponent(url)}`;
 }
 
 // ── Single in-memory store ──────────────────────────────────────────────────
@@ -283,14 +283,8 @@ export async function aiSearchProducts(query: string, limit = 3): Promise<Produc
   const q = query.trim().toLowerCase();
   if (!q || q.length < 2) return [];
   
-  // 🔥 Check cache first
-  const cached = aiSearchCache.get(q);
-  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    console.log(`[ikeaApi] Cache hit for "${q}"`);
-    return cached.products.slice(0, limit);
-  }
-  
   console.log(`[ikeaApi] AI search for: "${q}"`);
+  
   
   try {
     // Try live IKEA API search first
