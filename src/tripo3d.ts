@@ -1,7 +1,10 @@
 export type Tripo3DStatus = 'idle' | 'generating' | 'placing' | 'ready' | 'error';
 
+
+
 const API_KEY = (import.meta as any).env?.VITE_TRIPO3D_API_KEY ?? '';
-const BASE_URL = '/api/tripo3d';
+const isDev = (import.meta as any).env?.DEV === true;
+const BASE_URL = isDev ? '/api/tripo3d' : '/api/tripo3d-proxy';
 
 const blobUrls = new Set<string>();
 

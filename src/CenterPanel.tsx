@@ -175,19 +175,19 @@ export default function CenterPanel({
   const [detailLoading, setDetailLoading] = useState(false);
 
   // Reset state + fetch detail when product changes
-  useEffect(() => {
-    setWishlisted(false);
-    setQty(1);
-    setDetail(null);
+  // useEffect(() => {
+  //   setWishlisted(false);
+  //   setQty(1);
+  //   setDetail(null);
 
-    const ikeaId = (product as any).ikeaId;
-    if (!ikeaId) return;
+  //   const ikeaId = (product as any).ikeaId;
+  //   if (!ikeaId) return;
 
-    setDetailLoading(true);
-    getProductDetails(ikeaId).then(d => {
-      setDetail(d);
-    }).finally(() => setDetailLoading(false));
-  }, [product.id]);
+  //   setDetailLoading(true);
+  //   getProductDetails(ikeaId).then(d => {
+  //     setDetail(d);
+  //   }).finally(() => setDetailLoading(false));
+  // }, [product.id]);
 
   // Merge detail data with product (detail takes priority where available)
   const displayRating     = detail?.rating.average     ?? product.rating     ?? 4.0;
@@ -623,6 +623,7 @@ export default function CenterPanel({
                 <SpringBtn
                   style={{
                     width: 24, height: 24, borderRadius: '50%',
+                    
                     background: 'rgba(255,255,255,0.09)',
                     color: 'rgba(255,255,255,0.8)',
                     fontSize: '1rem', fontWeight: 300,
@@ -648,6 +649,7 @@ export default function CenterPanel({
                 className={`cp-add-btn${addFlash ? ' cp-add-flash' : ''}`}
                 onClick={handleAdd}
                 style={{
+                  
                   padding: '0.55rem 1.5rem',
                   borderRadius: 999,
                   background: addFlash
@@ -664,7 +666,7 @@ export default function CenterPanel({
                   transition: 'background 0.2s, border-color 0.2s, color 0.2s, transform 0.25s cubic-bezier(0.16,1,0.3,1)',
                 }}
               >
-                {addFlash ? '✓ Added' : `Add to cart${qty > 1 ? ` (${qty})` : ''}`}
+                {addFlash ? '✓ Added' : `Add to cart`}
               </SpringBtn>
             </div>
 
