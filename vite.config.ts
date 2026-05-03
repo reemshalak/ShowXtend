@@ -19,6 +19,11 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+     build: {
+      target: 'esnext',
+      modulePreload: false,
+    },
+
 
     server: {
       proxy: {
