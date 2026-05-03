@@ -1,14 +1,18 @@
-// api/tripo3d-proxy.js
+
 //
-// Vercel serverless function — proxies all Tripo3D API calls.
+// How Vercel routing works (plain serverless functions, NOT Next.js):
 //
-// How Vercel routing works:
-//   A request to /api/tripo3d-proxy/task  → req.url = "/task"
-//   A request to /api/tripo3d-proxy/upload/sts → req.url = "/upload/sts"
+// A request to:
+//   /api/tripo3d-proxy/upload/sts
 //
-// The function name segment (/api/tripo3d-proxy) is ALREADY stripped by
-// Vercel before req.url reaches this handler — so we must NOT try to
-// remove it again with .replace().
+// arrives as:
+//   req.url = "/api/tripo3d-proxy/upload/sts"
+//
+// So we MUST manually strip the "/api/tripo3d-proxy" prefix:
+//
+//   → "/upload/sts"
+//   → https://api.tripo3d.ai/v2/openapi/upload/sts
+//
 
 export default async function handler(req, res) {
   // CORS preflight
@@ -22,21 +26,6 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Tripo3D API key not configured on server' });
   }
 
-// How Vercel routing works (plain serverless functions, NOT Next.js):
-//
-// A request to:
-//   /api/tripo3d-proxy/upload/sts
-//
-// arrives as:
-//   req.url = "/api/tripo3d-proxy/upload/sts"
-//
-// So we MUST manually strip the "/api/tripo3d-proxy" prefix
-// before forwarding to Tripo:
-//
-//   → "/upload/sts"
-//   → https://api.tripo3d.ai/v2/openapi/upload/sts
-//
-// (Unlike Next.js API routes, Vercel does NOT strip the route prefix automatically)
 
 const subPath = req.url.replace(/^\/api\/tripo3d-proxy/, '') || '/';
 const targetUrl = `https://api.tripo3d.ai/v2/openapi${subPath}`;
@@ -50,21 +39,17 @@ const targetUrl = `https://api.tripo3d.ai/v2/openapi${subPath}`;
 
     let body = undefined;
 
-    if (req.method === 'POST') {
-      const contentType = req.headers['content-type'] ?? '';
+  if (req.method === 'POST') {
+  const contentType = req.headers['content-type'] ?? '';
 
-      if (contentType.includes('multipart/form-data')) {
-        // File upload — forward raw body with original content-type
-        // Vercel gives us the raw buffer in req.body when bodyParser is disabled
-        headers['Content-Type'] = contentType;
-        body = req.body;
-      } else {
-        // JSON body
-        headers['Content-Type'] = 'application/json';
-        body = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
-      }
-    }
-
+  if (contentType.includes('multipart/form-data')) {
+    headers['Content-Type'] = contentType;
+    body = req; // ✅ stream, not req.body
+  } else {
+    headers['Content-Type'] = 'application/json';
+    body = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
+  }
+}
     const response = await fetch(targetUrl, {
       method: req.method,
       headers,
