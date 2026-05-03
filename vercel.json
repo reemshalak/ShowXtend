@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/api/img-proxy", "destination": "/api/img-proxy.js" },
+    { "source": "/api/tripo3d-proxy/:path*", "destination": "/api/tripo3d-proxy.js" },
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}

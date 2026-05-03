@@ -734,17 +734,17 @@ const placeProductInXR = async (product: Product) => {
 };
 
 const handlePlaceIt = async () => {
-  if (isXRMode) {
-    await placeProductInXR(selected);
-    return;
-  }
-  // Web mode unchanged
-  if (leftWindowRef.current) {
-    leftWindowRef.current.close();
-    leftWindowRef.current = null;
-  }
-  setMode('place-it');
-  broadcastAction('place_it');
+  // if (isXRMode) {
+  //   await placeProductInXR(selected);
+  //   return;
+  // }
+  // // Web mode unchanged
+  // if (leftWindowRef.current) {
+  //   leftWindowRef.current.close();
+  //   leftWindowRef.current = null;
+  // }
+   setMode('place-it');
+  // broadcastAction('place_it');
 };
 
 
