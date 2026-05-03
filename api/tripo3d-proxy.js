@@ -22,10 +22,24 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Tripo3D API key not configured on server' });
   }
 
-  // req.url is already the path AFTER /api/tripo3d-proxy, e.g. "/task" or "/upload/sts"
-  // Make sure it starts with /
-  const subPath = req.url.startsWith('/') ? req.url : `/${req.url}`;
-  const targetUrl = `https://api.tripo3d.ai/v2/openapi${subPath}`;
+// How Vercel routing works (plain serverless functions, NOT Next.js):
+//
+// A request to:
+//   /api/tripo3d-proxy/upload/sts
+//
+// arrives as:
+//   req.url = "/api/tripo3d-proxy/upload/sts"
+//
+// So we MUST manually strip the "/api/tripo3d-proxy" prefix
+// before forwarding to Tripo:
+//
+//   → "/upload/sts"
+//   → https://api.tripo3d.ai/v2/openapi/upload/sts
+//
+// (Unlike Next.js API routes, Vercel does NOT strip the route prefix automatically)
+
+const subPath = req.url.replace(/^\/api\/tripo3d-proxy/, '') || '/';
+const targetUrl = `https://api.tripo3d.ai/v2/openapi${subPath}`;
 
   console.log(`[tripo3d-proxy] ${req.method} ${subPath} → ${targetUrl}`);
 
