@@ -42,10 +42,16 @@ const targetUrl = `https://api.tripo3d.ai/v2/openapi${subPath}`;
   if (req.method === 'POST') {
   const contentType = req.headers['content-type'] ?? '';
 
-  if (contentType.includes('multipart/form-data')) {
-    headers['Content-Type'] = contentType;
-    body = req; // ✅ stream, not req.body
-  } else {
+ if (contentType.includes('multipart/form-data')) {
+  headers['Content-Type'] = contentType;
+
+  // ✅ Vercel-safe approach: forward buffer instead of req
+  const chunks = [];
+  for await (const chunk of req) {
+    chunks.push(chunk);
+  }
+  body = Buffer.concat(chunks);
+} else {
     headers['Content-Type'] = 'application/json';
     body = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
   }
